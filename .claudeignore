@@ -1,0 +1,63 @@
+# NeuronGuard AG Agents — .claudeignore
+# Files and directories that Claude Code should not read or modify
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment files with secrets
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Large data files
+*.pkl
+*.parquet
+*.csv
+data/
+volumes/
+
+# Secrets and keys
+*.pem
+*.key
+*.crt
+secrets/
+
+# Node (if any frontend)
+node_modules/

@@ -1,0 +1,327 @@
+{
+  "name": "NeuronGuard-Agent-Gateway",
+  "nodes": [
+    {
+      "id": "webhook-in",
+      "name": "Webhook Panel Admin",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "parameters": {
+        "path": "agent-gateway",
+        "responseMode": "responseNode",
+        "httpMethod": "POST",
+        "options": {
+          "rawBody": false
+        }
+      }
+    },
+    {
+      "id": "validate-input",
+      "name": "Validate & Normalize Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300],
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\n// Required fields\nconst slug = body.slug || body.agent_slug;\nconst sessionId = body.session_id || body.sessionId;\nconst message = body.message || body.text || body.input;\nconst clientId = body.client_id || body.clientId || 'anonymous';\nconst apiKey = body.api_key || $input.first().json.headers?.['x-api-key'];\n\n// Validate\nif (!slug) throw new Error('Missing required field: slug');\nif (!sessionId) throw new Error('Missing required field: session_id');\nif (!message) throw new Error('Missing required field: message');\nif (!apiKey) throw new Error('Missing required field: api_key');\n\n// Sanitize\nconst sanitizedMessage = message.trim().substring(0, 5000);\n\nreturn [{ json: {\n  slug,\n  session_id: sessionId,\n  client_id: clientId,\n  message: sanitizedMessage,\n  api_key: apiKey,\n  timestamp: new Date().toISOString(),\n  request_id: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`\n}}];"
+      }
+    },
+    {
+      "id": "check-rate-limit",
+      "name": "Rate Limit Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://neurona-aplication-backend.shyntai.com/rpc/ng_check_rate_limit",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_client_id\": \"{{ $json.client_id }}\",\n  \"p_endpoint\": \"agent/{{ $json.slug }}\",\n  \"p_max_requests\": 60,\n  \"p_window_seconds\": 60\n}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "45WEErzA0MGhcJ2X",
+          "name": "InsForge Shynt AI"
+        }
+      }
+    },
+    {
+      "id": "if-rate-limited",
+      "name": "IF Rate Limited",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [920, 300],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "rate-limit-check",
+              "leftValue": "={{ $json.allowed }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "respond-429",
+      "name": "Respond 429 Too Many Requests",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1160, 180],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 429,
+        "responseBody": "={\n  \"error\": \"Rate limit exceeded\",\n  \"code\": \"RATE_LIMIT_EXCEEDED\",\n  \"retry_after\": 60\n}"
+      }
+    },
+    {
+      "id": "validate-agent",
+      "name": "Validate Agent Exists",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1160, 420],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://neurona-aplication-backend.shyntai.com/ag_agents?slug=eq.{{ $('Validate & Normalize Input').first().json.slug }}&select=id,slug,name,active",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "45WEErzA0MGhcJ2X",
+          "name": "InsForge Shynt AI"
+        }
+      }
+    },
+    {
+      "id": "if-agent-valid",
+      "name": "IF Agent Valid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1400, 420],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "agent-exists",
+              "leftValue": "={{ $json.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "respond-404",
+      "name": "Respond 404 Agent Not Found",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1640, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 404,
+        "responseBody": "={\n  \"error\": \"Agent not found\",\n  \"code\": \"AGENT_NOT_FOUND\",\n  \"slug\": \"{{ $('Validate & Normalize Input').first().json.slug }}\"\n}"
+      }
+    },
+    {
+      "id": "call-crewai",
+      "name": "Call CrewAI Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1640, 540],
+      "parameters": {
+        "method": "POST",
+        "url": "=http://neuronguard-agents:8000/agent/{{ $('Validate & Normalize Input').first().json.slug }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session_id\": \"{{ $('Validate & Normalize Input').first().json.session_id }}\",\n  \"client_id\": \"{{ $('Validate & Normalize Input').first().json.client_id }}\",\n  \"message\": {{ JSON.stringify($('Validate & Normalize Input').first().json.message) }},\n  \"request_id\": \"{{ $('Validate & Normalize Input').first().json.request_id }}\"\n}",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "parse-crewai-response",
+      "name": "Parse CrewAI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1880, 540],
+      "parameters": {
+        "jsCode": "const inputData = $('Validate & Normalize Input').first().json;\nconst crewaiResponse = $input.first().json;\nconst httpStatus = $input.first().json.$response?.statusCode || 200;\n\n// Handle CrewAI errors\nif (httpStatus >= 400 || crewaiResponse.error) {\n  return [{ json: {\n    success: false,\n    error: crewaiResponse.error || 'Agent error',\n    http_status: httpStatus,\n    request_id: inputData.request_id,\n    slug: inputData.slug\n  }}];\n}\n\nreturn [{ json: {\n  success: true,\n  session_id: inputData.session_id,\n  agent: inputData.slug,\n  response: crewaiResponse.response || crewaiResponse.result || '',\n  sources: crewaiResponse.sources || [],\n  skills_used: crewaiResponse.skills_used || [],\n  tokens_used: crewaiResponse.tokens_used || 0,\n  model_used: crewaiResponse.model_used || 'unknown',\n  request_id: inputData.request_id,\n  timestamp: new Date().toISOString()\n}}];"
+      }
+    },
+    {
+      "id": "if-crewai-success",
+      "name": "IF CrewAI Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2120, 540],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "success-check",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "log-to-insforge",
+      "name": "Log Usage to InsForge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2360, 420],
+      "parameters": {
+        "method": "POST",
+        "url": "https://neurona-aplication-backend.shyntai.com/ag_usage_logs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"request_id\": \"{{ $json.request_id }}\",\n  \"session_id\": \"{{ $json.session_id }}\",\n  \"client_id\": \"{{ $('Validate & Normalize Input').first().json.client_id }}\",\n  \"agent_slug\": \"{{ $json.agent }}\",\n  \"tokens_used\": {{ $json.tokens_used }},\n  \"model_used\": \"{{ $json.model_used }}\",\n  \"success\": {{ $json.success }},\n  \"timestamp\": \"{{ $json.timestamp }}\"\n}",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "45WEErzA0MGhcJ2X",
+          "name": "InsForge Shynt AI"
+        }
+      }
+    },
+    {
+      "id": "respond-200",
+      "name": "Respond 200 Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2600, 420],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 200,
+        "responseBody": "={{ JSON.stringify($('Parse CrewAI Response').first().json) }}"
+      }
+    },
+    {
+      "id": "respond-500",
+      "name": "Respond 500 Agent Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2360, 660],
+      "parameters": {
+        "respondWith": "json",
+        "responseCode": 500,
+        "responseBody": "={\n  \"error\": \"{{ $('Parse CrewAI Response').first().json.error }}\",\n  \"code\": \"AGENT_ERROR\",\n  \"request_id\": \"{{ $('Parse CrewAI Response').first().json.request_id }}\"\n}"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Panel Admin": {
+      "main": [
+        [{ "node": "Validate & Normalize Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Validate & Normalize Input": {
+      "main": [
+        [{ "node": "Rate Limit Check", "type": "main", "index": 0 }]
+      ]
+    },
+    "Rate Limit Check": {
+      "main": [
+        [{ "node": "IF Rate Limited", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF Rate Limited": {
+      "main": [
+        [{ "node": "Respond 429 Too Many Requests", "type": "main", "index": 0 }],
+        [{ "node": "Validate Agent Exists", "type": "main", "index": 0 }]
+      ]
+    },
+    "Validate Agent Exists": {
+      "main": [
+        [{ "node": "IF Agent Valid", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF Agent Valid": {
+      "main": [
+        [{ "node": "Respond 404 Agent Not Found", "type": "main", "index": 0 }],
+        [{ "node": "Call CrewAI Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "Call CrewAI Agent": {
+      "main": [
+        [{ "node": "Parse CrewAI Response", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse CrewAI Response": {
+      "main": [
+        [{ "node": "IF CrewAI Success", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF CrewAI Success": {
+      "main": [
+        [{ "node": "Log Usage to InsForge", "type": "main", "index": 0 }],
+        [{ "node": "Respond 500 Agent Error", "type": "main", "index": 0 }]
+      ]
+    },
+    "Log Usage to InsForge": {
+      "main": [
+        [{ "node": "Respond 200 Success", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  }
+}
