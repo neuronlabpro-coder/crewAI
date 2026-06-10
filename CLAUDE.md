@@ -112,6 +112,47 @@ import re
 def clean_deepseek_response(text: str) -> str:
     return re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
 ```
+### 9. Embeddings — procesamiento secuencial obligatorio (Featherless slot budget)
+NUNCA procesar embeddings en paralelo. Featherless tiene slot limitado.
+El ingestor debe procesar chunks UNO A UNO con pausa entre cada uno:
+
+```python
+import asyncio
+
+async def embed_chunks_sequential(chunks: list[str], client) -> list[list[float]]:
+    """
+    Procesa embeddings de forma secuencial — 1 chunk por request.
+    NUNCA usar asyncio.gather() ni threading para embeddings.
+    """
+    embeddings = []
+    for i, chunk in enumerate(chunks):
+        embedding = await client.embeddings.create(
+            model=settings.FEATHERLESS_EMBEDDING_MODEL,  # Qwen/Qwen3-Embedding-0.6B
+            input=[chunk],  # siempre lista de 1 elemento
+        )
+        embeddings.append(embedding.data[0].embedding)
+        # Pausa entre chunks para no saturar el slot
+        if i < len(chunks) - 1:
+            await asyncio.sleep(0.5)
+    return embeddings
+```
+
+Variables de entorno que controlan esto:
+- `FEATHERLESS_EMBEDDING_BATCH_SIZE=1`
+- `FEATHERLESS_EMBEDDING_MAX_CONCURRENT=1`
+- `QDRANT_EMBED_BATCH_SIZE=1`
+
+El cliente de embeddings DEBE inicializarse con:
+```python
+from openai import AsyncOpenAI
+
+embeddings_client = AsyncOpenAI(
+    api_key=settings.FEATHERLESS_API_KEY,
+    base_url=settings.FEATHERLESS_BASE_URL,
+    max_retries=3,
+    timeout=30.0,
+)
+```
 
 ## Orden de implementación
 
