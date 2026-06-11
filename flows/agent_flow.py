@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 log = structlog.get_logger()
 
 _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
+_ORPHAN_CLOSE_RE = re.compile(r"^.*?</think>\s*", re.DOTALL)
 
 
 class _FlowState(BaseModel):
@@ -53,7 +54,10 @@ class _CrewFlow(Flow[_FlowState]):
         )
         crew = Crew(agents=[agent], tasks=[task], verbose=False)
         raw = await crew.kickoff_async()
-        self.state.result = _THINK_RE.sub("", str(raw)).strip()
+        text = _THINK_RE.sub("", str(raw))
+        if "</think>" in text:
+            text = _ORPHAN_CLOSE_RE.sub("", text)
+        self.state.result = text.strip()
 
 
 class AgentFlow:

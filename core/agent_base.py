@@ -13,10 +13,15 @@ from core.tools.redis_memory import RedisMemory
 log = structlog.get_logger()
 
 _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL)
+_ORPHAN_CLOSE_RE = re.compile(r"^.*?</think>\s*", re.DOTALL)
 
 
 def _clean_think_tags(text: str) -> str:
-    return _THINK_RE.sub("", text).strip()
+    text = _THINK_RE.sub("", text)
+    # Remove any orphaned </think> plus everything before it
+    if "</think>" in text:
+        text = _ORPHAN_CLOSE_RE.sub("", text)
+    return text.strip()
 
 
 class NeuronGuardAgent:
