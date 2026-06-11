@@ -1,5 +1,12 @@
+from __future__ import annotations
+
+import os
 import re
 from typing import TYPE_CHECKING
+
+
+# Suppress CrewAI's interactive tracing prompt on every fresh container
+os.environ.setdefault("CREWAI_TRACING_ENABLED", "false")
 
 from crewai import Agent, Crew, Task
 from crewai.flow.flow import Flow, start
@@ -54,7 +61,7 @@ class AgentFlow:
 
     @staticmethod
     async def kickoff(
-        agent: "NeuronGuardAgent",
+        agent: NeuronGuardAgent,
         session_id: str,
         client_id: str,
         message: str,
