@@ -20,11 +20,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
-          cpus: "2.0"
-    networks:
-      - dokploy-network
-      - default
+          memory: 8G
+          cpus: "4.0"
 
   redis:
     image: redis:7-alpine
@@ -37,8 +34,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - default
 
   qdrant:
     image: qdrant/qdrant:v1.9.0
@@ -53,9 +48,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-    networks:
-      - dokploy-network
-      - default
 
 volumes:
   redis-data:
@@ -63,6 +55,3 @@ volumes:
   qdrant-data:
     driver: local
 
-networks:
-  dokploy-network:
-    external: true
