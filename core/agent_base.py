@@ -32,7 +32,7 @@ class NeuronGuardAgent:
     goal: ClassVar[str] = ""
     backstory: ClassVar[str] = ""
     qdrant_collection: ClassVar[str] = ""
-    llm_model: ClassVar[str] = "deepseek-ai/DeepSeek-V4-Pro"
+    llm_model: ClassVar[str] = settings.FEATHERLESS_MODEL_DEEP
     max_tokens: ClassVar[int] = 2048
     temperature: ClassVar[float] = 0.1
     mcp_domains: ClassVar[list[str]] = []

@@ -1,4 +1,5 @@
 from core.agent_base import NeuronGuardAgent
+from core.config import settings
 
 
 class VulnAnalysisAgent(NeuronGuardAgent):
@@ -46,7 +47,7 @@ class VulnAnalysisAgent(NeuronGuardAgent):
         "Sé preciso, técnico y accionable. No uses lenguaje vago."
     )
     qdrant_collection = "ag_vuln_analysis"
-    llm_model = "deepseek-ai/DeepSeek-V4-Pro"
+    llm_model = settings.FEATHERLESS_MODEL_DEEP
     max_tokens = 2048
     temperature = 0.1
     mcp_domains = ["vulnerability", "cve", "cvss", "exploit", "patch", "nist"]
