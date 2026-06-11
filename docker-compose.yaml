@@ -10,7 +10,7 @@ services:
       redis:
         condition: service_healthy
       qdrant:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
@@ -22,6 +22,9 @@ services:
         limits:
           memory: 2G
           cpus: "2.0"
+    networks:
+      - dokploy-network
+      - default
 
   redis:
     image: redis:7-alpine
@@ -30,26 +33,35 @@ services:
     volumes:
       - redis-data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - default
 
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant:v1.9.0
     restart: always
     volumes:
       - qdrant-data:/qdrant/storage
     environment:
       QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY}
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:6333/healthz || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 30s
+    networks:
+      - default
 
 volumes:
   redis-data:
     driver: local
   qdrant-data:
     driver: local
+
+networks:
+  dokploy-network:
+    external: true
