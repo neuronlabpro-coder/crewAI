@@ -1,4 +1,5 @@
 import asyncio
+from urllib.parse import urlparse
 
 from openai import AsyncOpenAI
 from qdrant_client import AsyncQdrantClient
@@ -29,8 +30,15 @@ class QdrantRAG:
 
     def _get_qdrant_client(self) -> AsyncQdrantClient:
         if self._qdrant_client is None:
+            parsed = urlparse(settings.QDRANT_URL)
+            is_https = parsed.scheme == "https"
+            # qdrant_client falls back to port 6333 when URL has no explicit port,
+            # ignoring the HTTPS default (443). Use host/port/https to avoid this.
+            port = parsed.port or (443 if is_https else 6333)
             self._qdrant_client = AsyncQdrantClient(
-                url=settings.QDRANT_URL,
+                host=parsed.hostname,
+                port=port,
+                https=is_https,
                 api_key=settings.QDRANT_API_KEY or None,
                 check_compatibility=False,
             )

@@ -1,0 +1,786 @@
+2026-06-11T06:09:03.326Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-06-11T06:09:03.350Z INFO:     Started parent process [1]
+2026-06-11T06:09:10.839Z INFO:     Started server process [8]
+2026-06-11T06:09:10.840Z INFO:     Waiting for application startup.
+2026-06-11T06:09:10.842Z 2026-06-11 06:09:10 [info     ] startup                        service=neuronguard-agents
+2026-06-11T06:09:10.843Z INFO:     Application startup complete.
+2026-06-11T06:09:11.210Z 2026-06-11 06:09:11 [info     ] startup                        service=neuronguard-agents
+2026-06-11T06:09:11.212Z INFO:     Started server process [9]
+2026-06-11T06:09:11.213Z INFO:     Waiting for application startup.
+2026-06-11T06:09:11.213Z INFO:     Application startup complete.
+2026-06-11T06:09:13.759Z INFO:     127.0.0.1:49452 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:09:44.779Z INFO:     127.0.0.1:36164 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:10:16.192Z INFO:     127.0.0.1:53834 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:10:35.115Z INFO:     10.0.1.10:46252 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:10:47.628Z INFO:     127.0.0.1:42758 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:10:50.535Z 2026-06-11 06:10:50 [info     ] agent.request                  client_id=test request_id=035bb0cc-f2cb-4034-b297-a0ce8177c51d session_id=test-002 slug=vuln-analysis
+2026-06-11T06:11:06.168Z 2026-06-11 06:11:06 [debug    ] agent_registry.registered      slug=vuln-analysis
+2026-06-11T06:11:06.169Z 2026-06-11 06:11:06 [info     ] agent.run.start                session_id=test-002 slug=vuln-analysis
+2026-06-11T06:11:12.874Z 2026-06-11 06:11:10 [error    ] qdrant.search.error            collection=ag_vuln_analysis query='Explica CVE-2021-44228 Log4Shell'
+2026-06-11T06:11:12.874Z ╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+2026-06-11T06:11:12.874Z │ /app/.venv/lib/python3.11/site-packages/httpx/_transports/default.py:101 in  │
+2026-06-11T06:11:12.874Z │ map_httpcore_exceptions                                                      │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │    98 │   if len(HTTPCORE_EXC_MAP) == 0:                                     │
+2026-06-11T06:11:12.874Z │    99 │   │   HTTPCORE_EXC_MAP = _load_httpcore_exceptions()                 │
+2026-06-11T06:11:12.874Z │   100 │   try:                                                               │
+2026-06-11T06:11:12.874Z │ ❱ 101 │   │   yield                                                          │
+2026-06-11T06:11:12.874Z │   102 │   except Exception as exc:                                           │
+2026-06-11T06:11:12.874Z │   103 │   │   mapped_exc = None                                              │
+2026-06-11T06:11:12.874Z │   104                                                                        │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │ ╭────────────────── locals ──────────────────╮                               │
+2026-06-11T06:11:12.874Z │ │ message = 'All connection attempts failed' │                               │
+2026-06-11T06:11:12.874Z │ ╰────────────────────────────────────────────╯                               │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │ /app/.venv/lib/python3.11/site-packages/httpx/_transports/default.py:394 in  │
+2026-06-11T06:11:12.874Z │ handle_async_request                                                         │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │   391 │   │   │   extensions=request.extensions,                             │
+2026-06-11T06:11:12.874Z │   392 │   │   )                                                              │
+2026-06-11T06:11:12.874Z │   393 │   │   with map_httpcore_exceptions():                                │
+2026-06-11T06:11:12.874Z │ ❱ 394 │   │   │   resp = await self._pool.handle_async_request(req)          │
+2026-06-11T06:11:12.874Z │   395 │   │                                                                  │
+2026-06-11T06:11:12.874Z │   396 │   │   assert isinstance(resp.stream, typing.AsyncIterable)           │
+2026-06-11T06:11:12.874Z │   397                                                                        │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.874Z │ │ httpcore = <module 'httpcore' from                                       │ │
+2026-06-11T06:11:12.874Z │ │            '/app/.venv/lib/python3.11/site-packages/httpcore/__init__.p… │ │
+2026-06-11T06:11:12.874Z │ │      req = <Request [b'POST']>                                           │ │
+2026-06-11T06:11:12.874Z │ │  request = <Request('POST',                                              │ │
+2026-06-11T06:11:12.874Z │ │            'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_… │ │
+2026-06-11T06:11:12.874Z │ │     self = <httpx.AsyncHTTPTransport object at 0x7f5ada4daa10>           │ │
+2026-06-11T06:11:12.874Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_async/connection_pool.py:2 │
+2026-06-11T06:11:12.874Z │ 56 in handle_async_request                                                   │
+2026-06-11T06:11:12.874Z │                                                                              │
+2026-06-11T06:11:12.874Z │   253 │   │   │   │   closing = self._assign_requests_to_connections()       │
+2026-06-11T06:11:12.874Z │   254 │   │   │                                                              │
+2026-06-11T06:11:12.874Z │   255 │   │   │   await self._close_connections(closing)                     │
+2026-06-11T06:11:12.874Z │ ❱ 256 │   │   │   raise exc from None                                        │
+2026-06-11T06:11:12.874Z │   257 │   │                                                                  │
+2026-06-11T06:11:12.874Z │   258 │   │   # Return the response. Note that in this case we still have to │
+2026-06-11T06:11:12.874Z │   259 │   │   # the point at which the response is closed.                   │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.877Z │ │      closing = []                                                        │ │
+2026-06-11T06:11:12.877Z │ │   connection = <AsyncHTTPConnection [CONNECTION FAILED]>                 │ │
+2026-06-11T06:11:12.877Z │ │ pool_request = <httpcore._async.connection_pool.AsyncPoolRequest object  │ │
+2026-06-11T06:11:12.877Z │ │                at 0x7f5ad9b22390>                                        │ │
+2026-06-11T06:11:12.877Z │ │      request = <Request [b'POST']>                                       │ │
+2026-06-11T06:11:12.877Z │ │       scheme = 'https'                                                   │ │
+2026-06-11T06:11:12.877Z │ │         self = <AsyncConnectionPool [Requests: 0 active, 0 queued |      │ │
+2026-06-11T06:11:12.877Z │ │                Connections: 0 active, 0 idle]>                           │ │
+2026-06-11T06:11:12.877Z │ │      timeout = 5.0                                                       │ │
+2026-06-11T06:11:12.877Z │ │     timeouts = {'connect': 5.0, 'read': 5.0, 'write': 5.0, 'pool': 5.0}  │ │
+2026-06-11T06:11:12.877Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_async/connection_pool.py:2 │
+2026-06-11T06:11:12.877Z │ 36 in handle_async_request                                                   │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │   233 │   │   │   │                                                          │
+2026-06-11T06:11:12.877Z │   234 │   │   │   │   try:                                                   │
+2026-06-11T06:11:12.877Z │   235 │   │   │   │   │   # Send the request on the assigned connection.     │
+2026-06-11T06:11:12.877Z │ ❱ 236 │   │   │   │   │   response = await connection.handle_async_request(  │
+2026-06-11T06:11:12.877Z │   237 │   │   │   │   │   │   pool_request.request                           │
+2026-06-11T06:11:12.877Z │   238 │   │   │   │   │   )                                                  │
+2026-06-11T06:11:12.877Z │   239 │   │   │   │   except ConnectionNotAvailable:                         │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.877Z │ │      closing = []                                                        │ │
+2026-06-11T06:11:12.877Z │ │   connection = <AsyncHTTPConnection [CONNECTION FAILED]>                 │ │
+2026-06-11T06:11:12.877Z │ │ pool_request = <httpcore._async.connection_pool.AsyncPoolRequest object  │ │
+2026-06-11T06:11:12.877Z │ │                at 0x7f5ad9b22390>                                        │ │
+2026-06-11T06:11:12.877Z │ │      request = <Request [b'POST']>                                       │ │
+2026-06-11T06:11:12.877Z │ │       scheme = 'https'                                                   │ │
+2026-06-11T06:11:12.877Z │ │         self = <AsyncConnectionPool [Requests: 0 active, 0 queued |      │ │
+2026-06-11T06:11:12.877Z │ │                Connections: 0 active, 0 idle]>                           │ │
+2026-06-11T06:11:12.877Z │ │      timeout = 5.0                                                       │ │
+2026-06-11T06:11:12.877Z │ │     timeouts = {'connect': 5.0, 'read': 5.0, 'write': 5.0, 'pool': 5.0}  │ │
+2026-06-11T06:11:12.877Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_async/connection.py:101 in │
+2026-06-11T06:11:12.877Z │ handle_async_request                                                         │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │    98 │   │   │   │   │   │   )                                              │
+2026-06-11T06:11:12.877Z │    99 │   │   except BaseException as exc:                                   │
+2026-06-11T06:11:12.877Z │   100 │   │   │   self._connect_failed = True                                │
+2026-06-11T06:11:12.877Z │ ❱ 101 │   │   │   raise exc                                                  │
+2026-06-11T06:11:12.877Z │   102 │   │                                                                  │
+2026-06-11T06:11:12.877Z │   103 │   │   return await self._connection.handle_async_request(request)    │
+2026-06-11T06:11:12.877Z │   104                                                                        │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ ╭────────────────────── locals ───────────────────────╮                      │
+2026-06-11T06:11:12.877Z │ │ request = <Request [b'POST']>                       │                      │
+2026-06-11T06:11:12.877Z │ │    self = <AsyncHTTPConnection [CONNECTION FAILED]> │                      │
+2026-06-11T06:11:12.877Z │ ╰─────────────────────────────────────────────────────╯                      │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_async/connection.py:78 in  │
+2026-06-11T06:11:12.877Z │ handle_async_request                                                         │
+2026-06-11T06:11:12.877Z │                                                                              │
+2026-06-11T06:11:12.877Z │    75 │   │   try:                                                           │
+2026-06-11T06:11:12.878Z │    76 │   │   │   async with self._request_lock:                             │
+2026-06-11T06:11:12.878Z │    77 │   │   │   │   if self._connection is None:                           │
+2026-06-11T06:11:12.878Z │ ❱  78 │   │   │   │   │   stream = await self._connect(request)              │
+2026-06-11T06:11:12.878Z │    79 │   │   │   │   │                                                      │
+2026-06-11T06:11:12.878Z │    80 │   │   │   │   │   ssl_object = stream.get_extra_info("ssl_object")   │
+2026-06-11T06:11:12.878Z │    81 │   │   │   │   │   http2_negotiated = (                               │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭────────────────────── locals ───────────────────────╮                      │
+2026-06-11T06:11:12.878Z │ │ request = <Request [b'POST']>                       │                      │
+2026-06-11T06:11:12.878Z │ │    self = <AsyncHTTPConnection [CONNECTION FAILED]> │                      │
+2026-06-11T06:11:12.878Z │ ╰─────────────────────────────────────────────────────╯                      │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_async/connection.py:124 in │
+2026-06-11T06:11:12.878Z │ _connect                                                                     │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   121 │   │   │   │   │   │   "socket_options": self._socket_options,        │
+2026-06-11T06:11:12.878Z │   122 │   │   │   │   │   }                                                  │
+2026-06-11T06:11:12.878Z │   123 │   │   │   │   │   async with Trace("connect_tcp", logger, request, k │
+2026-06-11T06:11:12.878Z │ ❱ 124 │   │   │   │   │   │   stream = await self._network_backend.connect_t │
+2026-06-11T06:11:12.878Z │   125 │   │   │   │   │   │   trace.return_value = stream                    │
+2026-06-11T06:11:12.878Z │   126 │   │   │   │   else:                                                  │
+2026-06-11T06:11:12.878Z │   127 │   │   │   │   │   kwargs = {                                         │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭──────────────────────────────── locals ─────────────────────────────────╮  │
+2026-06-11T06:11:12.878Z │ │       delays = <generator object exponential_backoff at 0x7f5ad9b24d60> │  │
+2026-06-11T06:11:12.878Z │ │       kwargs = {                                                        │  │
+2026-06-11T06:11:12.878Z │ │                │   'host': 'vectordatarag.shyntai.com',                 │  │
+2026-06-11T06:11:12.878Z │ │                │   'port': 6333,                                        │  │
+2026-06-11T06:11:12.878Z │ │                │   'local_address': None,                               │  │
+2026-06-11T06:11:12.878Z │ │                │   'timeout': 5.0,                                      │  │
+2026-06-11T06:11:12.878Z │ │                │   'socket_options': None                               │  │
+2026-06-11T06:11:12.878Z │ │                }                                                        │  │
+2026-06-11T06:11:12.878Z │ │      request = <Request [b'POST']>                                      │  │
+2026-06-11T06:11:12.878Z │ │ retries_left = 0                                                        │  │
+2026-06-11T06:11:12.878Z │ │         self = <AsyncHTTPConnection [CONNECTION FAILED]>                │  │
+2026-06-11T06:11:12.878Z │ │ sni_hostname = None                                                     │  │
+2026-06-11T06:11:12.878Z │ │      timeout = 5.0                                                      │  │
+2026-06-11T06:11:12.878Z │ │     timeouts = {'connect': 5.0, 'read': 5.0, 'write': 5.0, 'pool': 5.0} │  │
+2026-06-11T06:11:12.878Z │ │        trace = <httpcore._trace.Trace object at 0x7f5ad9b22650>         │  │
+2026-06-11T06:11:12.878Z │ ╰─────────────────────────────────────────────────────────────────────────╯  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_backends/auto.py:31 in     │
+2026-06-11T06:11:12.878Z │ connect_tcp                                                                  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   28 │   │   socket_options: typing.Iterable[SOCKET_OPTION] | None = None,   │
+2026-06-11T06:11:12.878Z │   29 │   ) -> AsyncNetworkStream:                                            │
+2026-06-11T06:11:12.878Z │   30 │   │   await self._init_backend()                                      │
+2026-06-11T06:11:12.878Z │ ❱ 31 │   │   return await self._backend.connect_tcp(                         │
+2026-06-11T06:11:12.878Z │   32 │   │   │   host,                                                       │
+2026-06-11T06:11:12.878Z │   33 │   │   │   port,                                                       │
+2026-06-11T06:11:12.878Z │   34 │   │   │   timeout=timeout,                                            │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │           host = 'vectordatarag.shyntai.com'                             │ │
+2026-06-11T06:11:12.878Z │ │  local_address = None                                                    │ │
+2026-06-11T06:11:12.878Z │ │           port = 6333                                                    │ │
+2026-06-11T06:11:12.878Z │ │           self = <httpcore._backends.auto.AutoBackend object at          │ │
+2026-06-11T06:11:12.878Z │ │                  0x7f5ada4daa50>                                         │ │
+2026-06-11T06:11:12.878Z │ │ socket_options = None                                                    │ │
+2026-06-11T06:11:12.878Z │ │        timeout = 5.0                                                     │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_backends/anyio.py:113 in   │
+2026-06-11T06:11:12.878Z │ connect_tcp                                                                  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   110 │   │   │   OSError: ConnectError,                                     │
+2026-06-11T06:11:12.878Z │   111 │   │   │   anyio.BrokenResourceError: ConnectError,                   │
+2026-06-11T06:11:12.878Z │   112 │   │   }                                                              │
+2026-06-11T06:11:12.878Z │ ❱ 113 │   │   with map_exceptions(exc_map):                                  │
+2026-06-11T06:11:12.878Z │   114 │   │   │   with anyio.fail_after(timeout):                            │
+2026-06-11T06:11:12.878Z │   115 │   │   │   │   stream: anyio.abc.ByteStream = await anyio.connect_tcp │
+2026-06-11T06:11:12.878Z │   116 │   │   │   │   │   remote_host=host,                                  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │        exc_map = {                                                       │ │
+2026-06-11T06:11:12.878Z │ │                  │   <class 'TimeoutError'>: <class                      │ │
+2026-06-11T06:11:12.878Z │ │                  'httpcore.ConnectTimeout'>,                             │ │
+2026-06-11T06:11:12.878Z │ │                  │   <class 'OSError'>: <class 'httpcore.ConnectError'>, │ │
+2026-06-11T06:11:12.878Z │ │                  │   <class 'anyio.BrokenResourceError'>: <class         │ │
+2026-06-11T06:11:12.878Z │ │                  'httpcore.ConnectError'>                                │ │
+2026-06-11T06:11:12.878Z │ │                  }                                                       │ │
+2026-06-11T06:11:12.878Z │ │           host = 'vectordatarag.shyntai.com'                             │ │
+2026-06-11T06:11:12.878Z │ │  local_address = None                                                    │ │
+2026-06-11T06:11:12.878Z │ │           port = 6333                                                    │ │
+2026-06-11T06:11:12.878Z │ │           self = <httpcore.AnyIOBackend object at 0x7f5ad9b22590>        │ │
+2026-06-11T06:11:12.878Z │ │ socket_options = []                                                      │ │
+2026-06-11T06:11:12.878Z │ │        timeout = 5.0                                                     │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /usr/local/lib/python3.11/contextlib.py:158 in __exit__                      │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   155 │   │   │   │   # tell if we get the same exception back               │
+2026-06-11T06:11:12.878Z │   156 │   │   │   │   value = typ()                                          │
+2026-06-11T06:11:12.878Z │   157 │   │   │   try:                                                       │
+2026-06-11T06:11:12.878Z │ ❱ 158 │   │   │   │   self.gen.throw(typ, value, traceback)                  │
+2026-06-11T06:11:12.878Z │   159 │   │   │   except StopIteration as exc:                               │
+2026-06-11T06:11:12.878Z │   160 │   │   │   │   # Suppress StopIteration *unless* it's the same except │
+2026-06-11T06:11:12.878Z │   161 │   │   │   │   # was passed to throw().  This prevents a StopIteratio │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │      self = <contextlib._GeneratorContextManager object at               │ │
+2026-06-11T06:11:12.878Z │ │             0x7f5ad9b226d0>                                              │ │
+2026-06-11T06:11:12.878Z │ │ traceback = <traceback object at 0x7f5ad9b22c00>                         │ │
+2026-06-11T06:11:12.878Z │ │     value = OSError('All connection attempts failed')                    │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpcore/_exceptions.py:14 in        │
+2026-06-11T06:11:12.878Z │ map_exceptions                                                               │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   11 │   except Exception as exc:  # noqa: PIE786                            │
+2026-06-11T06:11:12.878Z │   12 │   │   for from_exc, to_exc in map.items():                            │
+2026-06-11T06:11:12.878Z │   13 │   │   │   if isinstance(exc, from_exc):                               │
+2026-06-11T06:11:12.878Z │ ❱ 14 │   │   │   │   raise to_exc(exc) from exc                              │
+2026-06-11T06:11:12.878Z │   15 │   │   raise  # pragma: nocover                                        │
+2026-06-11T06:11:12.878Z │   16                                                                         │
+2026-06-11T06:11:12.878Z │   17                                                                         │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │ map = {                                                                  │ │
+2026-06-11T06:11:12.878Z │ │       │   <class 'TimeoutError'>: <class 'httpcore.ConnectTimeout'>,     │ │
+2026-06-11T06:11:12.878Z │ │       │   <class 'OSError'>: <class 'httpcore.ConnectError'>,            │ │
+2026-06-11T06:11:12.878Z │ │       │   <class 'anyio.BrokenResourceError'>: <class                    │ │
+2026-06-11T06:11:12.878Z │ │       'httpcore.ConnectError'>                                           │ │
+2026-06-11T06:11:12.878Z │ │       }                                                                  │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z ╰──────────────────────────────────────────────────────────────────────────────╯
+2026-06-11T06:11:12.878Z ConnectError: All connection attempts failed
+2026-06-11T06:11:12.878Z The above exception was the direct cause of the following exception:
+2026-06-11T06:11:12.878Z ╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:223 │
+2026-06-11T06:11:12.878Z │ in send_inner                                                                │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   220 │                                                                      │
+2026-06-11T06:11:12.878Z │   221 │   async def send_inner(self, request: Request) -> Response:          │
+2026-06-11T06:11:12.878Z │   222 │   │   try:                                                           │
+2026-06-11T06:11:12.878Z │ ❱ 223 │   │   │   response = await self._async_client.send(request)          │
+2026-06-11T06:11:12.878Z │   224 │   │   except Exception as e:                                         │
+2026-06-11T06:11:12.878Z │   225 │   │   │   raise ResponseHandlingException(e)                         │
+2026-06-11T06:11:12.878Z │   226 │   │   return response                                                │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │ request = <Request('POST',                                               │ │
+2026-06-11T06:11:12.878Z │ │           'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_a… │ │
+2026-06-11T06:11:12.878Z │ │    self = <qdrant_client.http.api_client.AsyncApiClient object at        │ │
+2026-06-11T06:11:12.878Z │ │           0x7f5ada471e90>                                                │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_client.py:1629 in send        │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   1626 │   │                                                                 │
+2026-06-11T06:11:12.878Z │   1627 │   │   auth = self._build_request_auth(request, auth)                │
+2026-06-11T06:11:12.878Z │   1628 │   │                                                                 │
+2026-06-11T06:11:12.878Z │ ❱ 1629 │   │   response = await self._send_handling_auth(                    │
+2026-06-11T06:11:12.878Z │   1630 │   │   │   request,                                                  │
+2026-06-11T06:11:12.878Z │   1631 │   │   │   auth=auth,                                                │
+2026-06-11T06:11:12.878Z │   1632 │   │   │   follow_redirects=follow_redirects,                        │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │             auth = <httpx.Auth object at 0x7f5ad9b21a50>                 │ │
+2026-06-11T06:11:12.878Z │ │ follow_redirects = False                                                 │ │
+2026-06-11T06:11:12.878Z │ │          request = <Request('POST',                                      │ │
+2026-06-11T06:11:12.878Z │ │                    'https://vectordatarag.shyntai.com:6333/collections/… │ │
+2026-06-11T06:11:12.878Z │ │             self = <httpx.AsyncClient object at 0x7f5ada470890>          │ │
+2026-06-11T06:11:12.878Z │ │           stream = False                                                 │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_client.py:1657 in             │
+2026-06-11T06:11:12.878Z │ _send_handling_auth                                                          │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   1654 │   │   │   request = await auth_flow.__anext__()                     │
+2026-06-11T06:11:12.878Z │   1655 │   │   │                                                             │
+2026-06-11T06:11:12.878Z │   1656 │   │   │   while True:                                               │
+2026-06-11T06:11:12.878Z │ ❱ 1657 │   │   │   │   response = await self._send_handling_redirects(       │
+2026-06-11T06:11:12.878Z │   1658 │   │   │   │   │   request,                                          │
+2026-06-11T06:11:12.878Z │   1659 │   │   │   │   │   follow_redirects=follow_redirects,                │
+2026-06-11T06:11:12.878Z │   1660 │   │   │   │   │   history=history,                                  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │             auth = <httpx.Auth object at 0x7f5ad9b21a50>                 │ │
+2026-06-11T06:11:12.878Z │ │        auth_flow = <async_generator object Auth.async_auth_flow at       │ │
+2026-06-11T06:11:12.878Z │ │                    0x7f5ada485e40>                                       │ │
+2026-06-11T06:11:12.878Z │ │ follow_redirects = False                                                 │ │
+2026-06-11T06:11:12.878Z │ │          history = []                                                    │ │
+2026-06-11T06:11:12.878Z │ │          request = <Request('POST',                                      │ │
+2026-06-11T06:11:12.878Z │ │                    'https://vectordatarag.shyntai.com:6333/collections/… │ │
+2026-06-11T06:11:12.878Z │ │             self = <httpx.AsyncClient object at 0x7f5ada470890>          │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_client.py:1694 in             │
+2026-06-11T06:11:12.878Z │ _send_handling_redirects                                                     │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   1691 │   │   │   for hook in self._event_hooks["request"]:                 │
+2026-06-11T06:11:12.878Z │   1692 │   │   │   │   await hook(request)                                   │
+2026-06-11T06:11:12.878Z │   1693 │   │   │                                                             │
+2026-06-11T06:11:12.878Z │ ❱ 1694 │   │   │   response = await self._send_single_request(request)       │
+2026-06-11T06:11:12.878Z │   1695 │   │   │   try:                                                      │
+2026-06-11T06:11:12.878Z │   1696 │   │   │   │   for hook in self._event_hooks["response"]:            │
+2026-06-11T06:11:12.878Z │   1697 │   │   │   │   │   await hook(response)                              │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │ follow_redirects = False                                                 │ │
+2026-06-11T06:11:12.878Z │ │          history = []                                                    │ │
+2026-06-11T06:11:12.878Z │ │          request = <Request('POST',                                      │ │
+2026-06-11T06:11:12.878Z │ │                    'https://vectordatarag.shyntai.com:6333/collections/… │ │
+2026-06-11T06:11:12.878Z │ │             self = <httpx.AsyncClient object at 0x7f5ada470890>          │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_client.py:1730 in             │
+2026-06-11T06:11:12.878Z │ _send_single_request                                                         │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   1727 │   │   │   )                                                         │
+2026-06-11T06:11:12.878Z │   1728 │   │                                                                 │
+2026-06-11T06:11:12.878Z │   1729 │   │   with request_context(request=request):                        │
+2026-06-11T06:11:12.878Z │ ❱ 1730 │   │   │   response = await transport.handle_async_request(request)  │
+2026-06-11T06:11:12.878Z │   1731 │   │                                                                 │
+2026-06-11T06:11:12.878Z │   1732 │   │   assert isinstance(response.stream, AsyncByteStream)           │
+2026-06-11T06:11:12.878Z │   1733 │   │   response.request = request                                    │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │   request = <Request('POST',                                             │ │
+2026-06-11T06:11:12.878Z │ │             'https://vectordatarag.shyntai.com:6333/collections/ag_vuln… │ │
+2026-06-11T06:11:12.878Z │ │      self = <httpx.AsyncClient object at 0x7f5ada470890>                 │ │
+2026-06-11T06:11:12.878Z │ │     start = 1419476.647012988                                            │ │
+2026-06-11T06:11:12.878Z │ │ transport = <httpx.AsyncHTTPTransport object at 0x7f5ada4daa10>          │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_transports/default.py:393 in  │
+2026-06-11T06:11:12.878Z │ handle_async_request                                                         │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   390 │   │   │   content=request.stream,                                    │
+2026-06-11T06:11:12.878Z │   391 │   │   │   extensions=request.extensions,                             │
+2026-06-11T06:11:12.878Z │   392 │   │   )                                                              │
+2026-06-11T06:11:12.878Z │ ❱ 393 │   │   with map_httpcore_exceptions():                                │
+2026-06-11T06:11:12.878Z │   394 │   │   │   resp = await self._pool.handle_async_request(req)          │
+2026-06-11T06:11:12.878Z │   395 │   │                                                                  │
+2026-06-11T06:11:12.878Z │   396 │   │   assert isinstance(resp.stream, typing.AsyncIterable)           │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │ httpcore = <module 'httpcore' from                                       │ │
+2026-06-11T06:11:12.878Z │ │            '/app/.venv/lib/python3.11/site-packages/httpcore/__init__.p… │ │
+2026-06-11T06:11:12.878Z │ │      req = <Request [b'POST']>                                           │ │
+2026-06-11T06:11:12.878Z │ │  request = <Request('POST',                                              │ │
+2026-06-11T06:11:12.878Z │ │            'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_… │ │
+2026-06-11T06:11:12.878Z │ │     self = <httpx.AsyncHTTPTransport object at 0x7f5ada4daa10>           │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /usr/local/lib/python3.11/contextlib.py:158 in __exit__                      │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   155 │   │   │   │   # tell if we get the same exception back               │
+2026-06-11T06:11:12.878Z │   156 │   │   │   │   value = typ()                                          │
+2026-06-11T06:11:12.878Z │   157 │   │   │   try:                                                       │
+2026-06-11T06:11:12.878Z │ ❱ 158 │   │   │   │   self.gen.throw(typ, value, traceback)                  │
+2026-06-11T06:11:12.878Z │   159 │   │   │   except StopIteration as exc:                               │
+2026-06-11T06:11:12.878Z │   160 │   │   │   │   # Suppress StopIteration *unless* it's the same except │
+2026-06-11T06:11:12.878Z │   161 │   │   │   │   # was passed to throw().  This prevents a StopIteratio │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.878Z │ │      self = <contextlib._GeneratorContextManager object at               │ │
+2026-06-11T06:11:12.878Z │ │             0x7f5ad9b22210>                                              │ │
+2026-06-11T06:11:12.878Z │ │ traceback = <traceback object at 0x7f5ad9b217c0>                         │ │
+2026-06-11T06:11:12.878Z │ │     value = ConnectError(OSError('All connection attempts failed'))      │ │
+2026-06-11T06:11:12.878Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ /app/.venv/lib/python3.11/site-packages/httpx/_transports/default.py:118 in  │
+2026-06-11T06:11:12.878Z │ map_httpcore_exceptions                                                      │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │   115 │   │   │   raise                                                      │
+2026-06-11T06:11:12.878Z │   116 │   │                                                                  │
+2026-06-11T06:11:12.878Z │   117 │   │   message = str(exc)                                             │
+2026-06-11T06:11:12.878Z │ ❱ 118 │   │   raise mapped_exc(message) from exc                             │
+2026-06-11T06:11:12.878Z │   119                                                                        │
+2026-06-11T06:11:12.878Z │   120                                                                        │
+2026-06-11T06:11:12.878Z │   121 class ResponseStream(SyncByteStream):                                  │
+2026-06-11T06:11:12.878Z │                                                                              │
+2026-06-11T06:11:12.878Z │ ╭────────────────── locals ──────────────────╮                               │
+2026-06-11T06:11:12.878Z │ │ message = 'All connection attempts failed' │                               │
+2026-06-11T06:11:12.878Z │ ╰────────────────────────────────────────────╯                               │
+2026-06-11T06:11:12.878Z ╰──────────────────────────────────────────────────────────────────────────────╯
+2026-06-11T06:11:12.878Z ConnectError: All connection attempts failed
+2026-06-11T06:11:12.879Z During handling of the above exception, another exception occurred:
+2026-06-11T06:11:12.879Z ╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+2026-06-11T06:11:12.879Z │ /app/core/tools/qdrant_tool.py:66 in search                                  │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │   63 │   │   │   query_vector = vectors[0]                                   │
+2026-06-11T06:11:12.879Z │   64 │   │   │                                                               │
+2026-06-11T06:11:12.879Z │   65 │   │   │   qdrant = self._get_qdrant_client()                          │
+2026-06-11T06:11:12.879Z │ ❱ 66 │   │   │   results = await qdrant.query_points(                        │
+2026-06-11T06:11:12.879Z │   67 │   │   │   │   collection_name=collection,                             │
+2026-06-11T06:11:12.879Z │   68 │   │   │   │   query=query_vector,                                     │
+2026-06-11T06:11:12.879Z │   69 │   │   │   │   limit=k,                                                │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.879Z │ │   collection = 'ag_vuln_analysis'                                        │ │
+2026-06-11T06:11:12.879Z │ │            k = 5                                                         │ │
+2026-06-11T06:11:12.879Z │ │       qdrant = <qdrant_client.async_qdrant_client.AsyncQdrantClient      │ │
+2026-06-11T06:11:12.879Z │ │                object at 0x7f5add1a2650>                                 │ │
+2026-06-11T06:11:12.879Z │ │        query = 'Explica CVE-2021-44228 Log4Shell'                        │ │
+2026-06-11T06:11:12.879Z │ │ query_vector = [                                                         │ │
+2026-06-11T06:11:12.879Z │ │                │   0.02566465362906456,                                  │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.005100027192384005,                                │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.011351673863828182,                                │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.08620691299438477,                                 │ │
+2026-06-11T06:11:12.879Z │ │                │   0.05692288279533386,                                  │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.0644906684756279,                                  │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.08949725329875946,                                 │ │
+2026-06-11T06:11:12.879Z │ │                │   0.007896816357970238,                                 │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.04474862664937973,                                 │ │
+2026-06-11T06:11:12.879Z │ │                │   -0.0016965816030278802,                               │ │
+2026-06-11T06:11:12.879Z │ │                │   ... +1014                                             │ │
+2026-06-11T06:11:12.879Z │ │                ]                                                         │ │
+2026-06-11T06:11:12.879Z │ │         self = <core.tools.qdrant_tool.QdrantRAG object at               │ │
+2026-06-11T06:11:12.879Z │ │                0x7f5add3bd090>                                           │ │
+2026-06-11T06:11:12.879Z │ │        top_k = None                                                      │ │
+2026-06-11T06:11:12.879Z │ │      vectors = [                                                         │ │
+2026-06-11T06:11:12.879Z │ │                │   [                                                     │ │
+2026-06-11T06:11:12.879Z │ │                │   │   0.02566465362906456,                              │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.005100027192384005,                            │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.011351673863828182,                            │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.08620691299438477,                             │ │
+2026-06-11T06:11:12.879Z │ │                │   │   0.05692288279533386,                              │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.0644906684756279,                              │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.08949725329875946,                             │ │
+2026-06-11T06:11:12.879Z │ │                │   │   0.007896816357970238,                             │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.04474862664937973,                             │ │
+2026-06-11T06:11:12.879Z │ │                │   │   -0.0016965816030278802,                           │ │
+2026-06-11T06:11:12.879Z │ │                │   │   ... +1014                                         │ │
+2026-06-11T06:11:12.879Z │ │                │   ]                                                     │ │
+2026-06-11T06:11:12.879Z │ │                ]                                                         │ │
+2026-06-11T06:11:12.879Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/async_qdrant_client.py │
+2026-06-11T06:11:12.879Z │ :400 in query_points                                                         │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │    397 │   │   │   │   │   │   if prefetch is not None                       │
+2026-06-11T06:11:12.879Z │    398 │   │   │   │   │   │   else None                                     │
+2026-06-11T06:11:12.879Z │    399 │   │   │   │   │   )                                                 │
+2026-06-11T06:11:12.879Z │ ❱  400 │   │   return await self._client.query_points(                       │
+2026-06-11T06:11:12.879Z │    401 │   │   │   collection_name=collection_name,                          │
+2026-06-11T06:11:12.879Z │    402 │   │   │   query=query,                                              │
+2026-06-11T06:11:12.879Z │    403 │   │   │   prefetch=prefetch,                                        │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.879Z │ │    collection_name = 'ag_vuln_analysis'                                  │ │
+2026-06-11T06:11:12.879Z │ │        consistency = None                                                │ │
+2026-06-11T06:11:12.879Z │ │             kwargs = {}                                                  │ │
+2026-06-11T06:11:12.879Z │ │              limit = 5                                                   │ │
+2026-06-11T06:11:12.879Z │ │        lookup_from = None                                                │ │
+2026-06-11T06:11:12.879Z │ │             offset = None                                                │ │
+2026-06-11T06:11:12.879Z │ │           prefetch = None                                                │ │
+2026-06-11T06:11:12.879Z │ │              query = NearestQuery(                                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   nearest=[                                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.02566465362906456,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.005100027192384005,                      │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.011351673863828182,                      │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.08620691299438477,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.05692288279533386,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.0644906684756279,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.08949725329875946,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.007896816357970238,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.04474862664937973,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.0016965816030278802,                     │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   ... +1014                                   │ │
+2026-06-11T06:11:12.879Z │ │                      │   ],                                              │ │
+2026-06-11T06:11:12.879Z │ │                      │   mmr=None                                        │ │
+2026-06-11T06:11:12.879Z │ │                      )                                                   │ │
+2026-06-11T06:11:12.879Z │ │       query_filter = None                                                │ │
+2026-06-11T06:11:12.879Z │ │    score_threshold = 0.7                                                 │ │
+2026-06-11T06:11:12.879Z │ │      search_params = None                                                │ │
+2026-06-11T06:11:12.879Z │ │               self = <qdrant_client.async_qdrant_client.AsyncQdrantClie… │ │
+2026-06-11T06:11:12.879Z │ │                      object at 0x7f5add1a2650>                           │ │
+2026-06-11T06:11:12.879Z │ │ shard_key_selector = None                                                │ │
+2026-06-11T06:11:12.879Z │ │            timeout = None                                                │ │
+2026-06-11T06:11:12.879Z │ │              using = None                                                │ │
+2026-06-11T06:11:12.879Z │ │       with_payload = True                                                │ │
+2026-06-11T06:11:12.879Z │ │       with_vectors = False                                               │ │
+2026-06-11T06:11:12.879Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/async_qdrant_remote.py │
+2026-06-11T06:11:12.879Z │ :501 in query_points                                                         │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │    498 │   │   │   │   with_payload=with_payload,                            │
+2026-06-11T06:11:12.879Z │    499 │   │   │   │   lookup_from=lookup_from,                              │
+2026-06-11T06:11:12.879Z │    500 │   │   │   )                                                         │
+2026-06-11T06:11:12.879Z │ ❱  501 │   │   │   query_result = await self.http.search_api.query_points(   │
+2026-06-11T06:11:12.879Z │    502 │   │   │   │   collection_name=collection_name,                      │
+2026-06-11T06:11:12.879Z │    503 │   │   │   │   consistency=consistency,                              │
+2026-06-11T06:11:12.879Z │    504 │   │   │   │   timeout=timeout,                                      │
+2026-06-11T06:11:12.879Z │                                                                              │
+2026-06-11T06:11:12.879Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.879Z │ │    collection_name = 'ag_vuln_analysis'                                  │ │
+2026-06-11T06:11:12.879Z │ │        consistency = None                                                │ │
+2026-06-11T06:11:12.879Z │ │             kwargs = {}                                                  │ │
+2026-06-11T06:11:12.879Z │ │              limit = 5                                                   │ │
+2026-06-11T06:11:12.879Z │ │        lookup_from = None                                                │ │
+2026-06-11T06:11:12.879Z │ │             offset = None                                                │ │
+2026-06-11T06:11:12.879Z │ │           prefetch = None                                                │ │
+2026-06-11T06:11:12.879Z │ │              query = NearestQuery(                                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   nearest=[                                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.02566465362906456,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.005100027192384005,                      │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.011351673863828182,                      │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.08620691299438477,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.05692288279533386,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.0644906684756279,                        │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.08949725329875946,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   0.007896816357970238,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.04474862664937973,                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   -0.0016965816030278802,                     │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   ... +1014                                   │ │
+2026-06-11T06:11:12.879Z │ │                      │   ],                                              │ │
+2026-06-11T06:11:12.879Z │ │                      │   mmr=None                                        │ │
+2026-06-11T06:11:12.879Z │ │                      )                                                   │ │
+2026-06-11T06:11:12.879Z │ │       query_filter = None                                                │ │
+2026-06-11T06:11:12.879Z │ │      query_request = QueryRequest(                                       │ │
+2026-06-11T06:11:12.879Z │ │                      │   shard_key=None,                                 │ │
+2026-06-11T06:11:12.879Z │ │                      │   prefetch=None,                                  │ │
+2026-06-11T06:11:12.879Z │ │                      │   query=NearestQuery(                             │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   nearest=[                                   │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   │   0.02566465362906456,                    │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   │   -0.005100027192384005,                  │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   │   -0.011351673863828182,                  │ │
+2026-06-11T06:11:12.879Z │ │                      │   │   │   -0.08620691299438477,                   │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   0.05692288279533386,                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   -0.0644906684756279,                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   -0.08949725329875946,                   │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   0.007896816357970238,                   │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   -0.04474862664937973,                   │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   -0.0016965816030278802,                 │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   │   ... +1014                               │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   ],                                          │ │
+2026-06-11T06:11:12.880Z │ │                      │   │   mmr=None                                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   ),                                              │ │
+2026-06-11T06:11:12.880Z │ │                      │   using=None,                                     │ │
+2026-06-11T06:11:12.880Z │ │                      │   filter=None,                                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   params=None,                                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   score_threshold=0.7,                            │ │
+2026-06-11T06:11:12.880Z │ │                      │   limit=5,                                        │ │
+2026-06-11T06:11:12.880Z │ │                      │   offset=None,                                    │ │
+2026-06-11T06:11:12.880Z │ │                      │   with_vector=False,                              │ │
+2026-06-11T06:11:12.880Z │ │                      │   with_payload=True,                              │ │
+2026-06-11T06:11:12.880Z │ │                      │   lookup_from=None                                │ │
+2026-06-11T06:11:12.880Z │ │                      )                                                   │ │
+2026-06-11T06:11:12.880Z │ │    score_threshold = 0.7                                                 │ │
+2026-06-11T06:11:12.880Z │ │      search_params = None                                                │ │
+2026-06-11T06:11:12.880Z │ │               self = <qdrant_client.async_qdrant_remote.AsyncQdrantRemo… │ │
+2026-06-11T06:11:12.880Z │ │                      object at 0x7f5add54ef50>                           │ │
+2026-06-11T06:11:12.880Z │ │ shard_key_selector = None                                                │ │
+2026-06-11T06:11:12.880Z │ │            timeout = None                                                │ │
+2026-06-11T06:11:12.880Z │ │              using = None                                                │ │
+2026-06-11T06:11:12.880Z │ │       with_payload = True                                                │ │
+2026-06-11T06:11:12.880Z │ │       with_vectors = False                                               │ │
+2026-06-11T06:11:12.880Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api/search_api.py │
+2026-06-11T06:11:12.880Z │ :560 in query_points                                                         │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │   557 │   │   """                                                            │
+2026-06-11T06:11:12.880Z │   558 │   │   Universally query points. This endpoint covers all capabilitie │
+2026-06-11T06:11:12.880Z │       recommend, discover, filters. But also enables hybrid and multi-stage  │
+2026-06-11T06:11:12.880Z │   559 │   │   """                                                            │
+2026-06-11T06:11:12.880Z │ ❱ 560 │   │   return await self._build_for_query_points(                     │
+2026-06-11T06:11:12.880Z │   561 │   │   │   collection_name=collection_name,                           │
+2026-06-11T06:11:12.880Z │   562 │   │   │   consistency=consistency,                                   │
+2026-06-11T06:11:12.880Z │   563 │   │   │   timeout=timeout,                                           │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.880Z │ │ collection_name = 'ag_vuln_analysis'                                     │ │
+2026-06-11T06:11:12.880Z │ │     consistency = None                                                   │ │
+2026-06-11T06:11:12.880Z │ │   query_request = QueryRequest(                                          │ │
+2026-06-11T06:11:12.880Z │ │                   │   shard_key=None,                                    │ │
+2026-06-11T06:11:12.880Z │ │                   │   prefetch=None,                                     │ │
+2026-06-11T06:11:12.880Z │ │                   │   query=NearestQuery(                                │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   nearest=[                                      │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   0.02566465362906456,                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.005100027192384005,                     │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.011351673863828182,                     │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.08620691299438477,                      │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   0.05692288279533386,                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.0644906684756279,                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.08949725329875946,                      │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   0.007896816357970238,                      │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.04474862664937973,                      │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   -0.0016965816030278802,                    │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   │   ... +1014                                  │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   ],                                             │ │
+2026-06-11T06:11:12.880Z │ │                   │   │   mmr=None                                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   ),                                                 │ │
+2026-06-11T06:11:12.880Z │ │                   │   using=None,                                        │ │
+2026-06-11T06:11:12.880Z │ │                   │   filter=None,                                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   params=None,                                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   score_threshold=0.7,                               │ │
+2026-06-11T06:11:12.880Z │ │                   │   limit=5,                                           │ │
+2026-06-11T06:11:12.880Z │ │                   │   offset=None,                                       │ │
+2026-06-11T06:11:12.880Z │ │                   │   with_vector=False,                                 │ │
+2026-06-11T06:11:12.880Z │ │                   │   with_payload=True,                                 │ │
+2026-06-11T06:11:12.880Z │ │                   │   lookup_from=None                                   │ │
+2026-06-11T06:11:12.880Z │ │                   )                                                      │ │
+2026-06-11T06:11:12.880Z │ │            self = <qdrant_client.http.api.search_api.AsyncSearchApi      │ │
+2026-06-11T06:11:12.880Z │ │                   object at 0x7f5ada4dac90>                              │ │
+2026-06-11T06:11:12.880Z │ │         timeout = None                                                   │ │
+2026-06-11T06:11:12.880Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:184 │
+2026-06-11T06:11:12.880Z │ in request                                                                   │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │   181 │   │   # since url is treated as an absolute path and might truncate  │
+2026-06-11T06:11:12.880Z │   182 │   │   url = urljoin(host, url.format(**path_params))                 │
+2026-06-11T06:11:12.880Z │   183 │   │   request = self._async_client.build_request(method, url, **kwar │
+2026-06-11T06:11:12.880Z │ ❱ 184 │   │   return await self.send(request, type_)                         │
+2026-06-11T06:11:12.880Z │   185 │                                                                      │
+2026-06-11T06:11:12.880Z │   186 │   @overload                                                          │
+2026-06-11T06:11:12.880Z │   187 │   def request_sync(self, *, type_: Type[T], **kwargs: Any) -> T:     │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.880Z │ │        host = 'https://vectordatarag.shyntai.com:6333/'                  │ │
+2026-06-11T06:11:12.880Z │ │      kwargs = {                                                          │ │
+2026-06-11T06:11:12.880Z │ │               │   'headers': {'Content-Type': 'application/json'},       │ │
+2026-06-11T06:11:12.880Z │ │               │   'params': {},                                          │ │
+2026-06-11T06:11:12.880Z │ │               │   'content':                                             │ │
+2026-06-11T06:11:12.880Z │ │               '{"query":{"nearest":[0.02566465362906456,-0.005100027192… │ │
+2026-06-11T06:11:12.880Z │ │               }                                                          │ │
+2026-06-11T06:11:12.880Z │ │      method = 'POST'                                                     │ │
+2026-06-11T06:11:12.880Z │ │ path_params = {'collection_name': 'ag_vuln_analysis'}                    │ │
+2026-06-11T06:11:12.880Z │ │     request = <Request('POST',                                           │ │
+2026-06-11T06:11:12.880Z │ │               'https://vectordatarag.shyntai.com:6333/collections/ag_vu… │ │
+2026-06-11T06:11:12.880Z │ │        self = <qdrant_client.http.api_client.AsyncApiClient object at    │ │
+2026-06-11T06:11:12.880Z │ │               0x7f5ada471e90>                                            │ │
+2026-06-11T06:11:12.880Z │ │         url = 'https://vectordatarag.shyntai.com:6333/collections/ag_vu… │ │
+2026-06-11T06:11:12.880Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:201 │
+2026-06-11T06:11:12.880Z │ in send                                                                      │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │   198 │   │   return get_event_loop().run_until_complete(self.request(type_= │
+2026-06-11T06:11:12.880Z │   199 │                                                                      │
+2026-06-11T06:11:12.880Z │   200 │   async def send(self, request: Request, type_: Type[T]) -> T:       │
+2026-06-11T06:11:12.880Z │ ❱ 201 │   │   response = await self.middleware(request, self.send_inner)     │
+2026-06-11T06:11:12.880Z │   202 │   │                                                                  │
+2026-06-11T06:11:12.880Z │   203 │   │   if response.status_code == 429:                                │
+2026-06-11T06:11:12.880Z │   204 │   │   │   retry_after_s = response.headers.get("Retry-After", None)  │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.880Z │ │ request = <Request('POST',                                               │ │
+2026-06-11T06:11:12.880Z │ │           'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_a… │ │
+2026-06-11T06:11:12.880Z │ │    self = <qdrant_client.http.api_client.AsyncApiClient object at        │ │
+2026-06-11T06:11:12.880Z │ │           0x7f5ada471e90>                                                │ │
+2026-06-11T06:11:12.880Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:238 │
+2026-06-11T06:11:12.880Z │ in new_middleware                                                            │
+2026-06-11T06:11:12.880Z │                                                                              │
+2026-06-11T06:11:12.880Z │   235 │   │   │   async def inner_send(request: Request) -> Response:        │
+2026-06-11T06:11:12.880Z │   236 │   │   │   │   return await current_middleware(request, call_next)    │
+2026-06-11T06:11:12.880Z │   237 │   │   │                                                              │
+2026-06-11T06:11:12.881Z │ ❱ 238 │   │   │   return await middleware(request, inner_send)               │
+2026-06-11T06:11:12.881Z │   239 │   │                                                                  │
+2026-06-11T06:11:12.881Z │   240 │   │   self.middleware = new_middleware                               │
+2026-06-11T06:11:12.881Z │   241                                                                        │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.881Z │ │          call_next = <bound method AsyncApiClient.send_inner of          │ │
+2026-06-11T06:11:12.881Z │ │                      <qdrant_client.http.api_client.AsyncApiClient       │ │
+2026-06-11T06:11:12.881Z │ │                      object at 0x7f5ada471e90>>                          │ │
+2026-06-11T06:11:12.881Z │ │ current_middleware = <qdrant_client.http.api_client.BaseAsyncMiddleware  │ │
+2026-06-11T06:11:12.881Z │ │                      object at 0x7f5ada471fd0>                           │ │
+2026-06-11T06:11:12.881Z │ │            request = <Request('POST',                                    │ │
+2026-06-11T06:11:12.881Z │ │                      'https://vectordatarag.shyntai.com:6333/collection… │ │
+2026-06-11T06:11:12.881Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/context_headers.py:47  │
+2026-06-11T06:11:12.881Z │ in async_rest_headers_middleware                                             │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │   44 ) -> Response:                                                          │
+2026-06-11T06:11:12.881Z │   45 │   for key, value in get_context_headers().items():                    │
+2026-06-11T06:11:12.881Z │   46 │   │   request.headers[key] = value                                    │
+2026-06-11T06:11:12.881Z │ ❱ 47 │   return await call_next(request)                                     │
+2026-06-11T06:11:12.881Z │   48                                                                         │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.881Z │ │ request = <Request('POST',                                               │ │
+2026-06-11T06:11:12.881Z │ │           'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_a… │ │
+2026-06-11T06:11:12.881Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:236 │
+2026-06-11T06:11:12.881Z │ in inner_send                                                                │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │   233 │   │                                                                  │
+2026-06-11T06:11:12.881Z │   234 │   │   async def new_middleware(request: Request, call_next: SendAsyn │
+2026-06-11T06:11:12.881Z │   235 │   │   │   async def inner_send(request: Request) -> Response:        │
+2026-06-11T06:11:12.881Z │ ❱ 236 │   │   │   │   return await current_middleware(request, call_next)    │
+2026-06-11T06:11:12.881Z │   237 │   │   │                                                              │
+2026-06-11T06:11:12.881Z │   238 │   │   │   return await middleware(request, inner_send)               │
+2026-06-11T06:11:12.881Z │   239                                                                        │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.881Z │ │          call_next = <bound method AsyncApiClient.send_inner of          │ │
+2026-06-11T06:11:12.881Z │ │                      <qdrant_client.http.api_client.AsyncApiClient       │ │
+2026-06-11T06:11:12.881Z │ │                      object at 0x7f5ada471e90>>                          │ │
+2026-06-11T06:11:12.881Z │ │ current_middleware = <qdrant_client.http.api_client.BaseAsyncMiddleware  │ │
+2026-06-11T06:11:12.881Z │ │                      object at 0x7f5ada471fd0>                           │ │
+2026-06-11T06:11:12.881Z │ │            request = <Request('POST',                                    │ │
+2026-06-11T06:11:12.881Z │ │                      'https://vectordatarag.shyntai.com:6333/collection… │ │
+2026-06-11T06:11:12.881Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:245 │
+2026-06-11T06:11:12.881Z │ in __call__                                                                  │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │   242                                                                        │
+2026-06-11T06:11:12.881Z │   243 class BaseAsyncMiddleware:                                             │
+2026-06-11T06:11:12.881Z │   244 │   async def __call__(self, request: Request, call_next: SendAsync) - │
+2026-06-11T06:11:12.881Z │ ❱ 245 │   │   return await call_next(request)                                │
+2026-06-11T06:11:12.881Z │   246                                                                        │
+2026-06-11T06:11:12.881Z │   247                                                                        │
+2026-06-11T06:11:12.881Z │   248 class BaseMiddleware:                                                  │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.881Z │ │ call_next = <bound method AsyncApiClient.send_inner of                   │ │
+2026-06-11T06:11:12.881Z │ │             <qdrant_client.http.api_client.AsyncApiClient object at      │ │
+2026-06-11T06:11:12.881Z │ │             0x7f5ada471e90>>                                             │ │
+2026-06-11T06:11:12.881Z │ │   request = <Request('POST',                                             │ │
+2026-06-11T06:11:12.881Z │ │             'https://vectordatarag.shyntai.com:6333/collections/ag_vuln… │ │
+2026-06-11T06:11:12.881Z │ │      self = <qdrant_client.http.api_client.BaseAsyncMiddleware object at │ │
+2026-06-11T06:11:12.881Z │ │             0x7f5ada471fd0>                                              │ │
+2026-06-11T06:11:12.881Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ /app/.venv/lib/python3.11/site-packages/qdrant_client/http/api_client.py:225 │
+2026-06-11T06:11:12.881Z │ in send_inner                                                                │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │   222 │   │   try:                                                           │
+2026-06-11T06:11:12.881Z │   223 │   │   │   response = await self._async_client.send(request)          │
+2026-06-11T06:11:12.881Z │   224 │   │   except Exception as e:                                         │
+2026-06-11T06:11:12.881Z │ ❱ 225 │   │   │   raise ResponseHandlingException(e)                         │
+2026-06-11T06:11:12.881Z │   226 │   │   return response                                                │
+2026-06-11T06:11:12.881Z │   227 │                                                                      │
+2026-06-11T06:11:12.881Z │   228 │   async def aclose(self) -> None:                                    │
+2026-06-11T06:11:12.881Z │                                                                              │
+2026-06-11T06:11:12.881Z │ ╭───────────────────────────────── locals ─────────────────────────────────╮ │
+2026-06-11T06:11:12.881Z │ │ request = <Request('POST',                                               │ │
+2026-06-11T06:11:12.881Z │ │           'https://vectordatarag.shyntai.com:6333/collections/ag_vuln_a… │ │
+2026-06-11T06:11:12.881Z │ │    self = <qdrant_client.http.api_client.AsyncApiClient object at        │ │
+2026-06-11T06:11:12.881Z │ │           0x7f5ada471e90>                                                │ │
+2026-06-11T06:11:12.881Z │ ╰──────────────────────────────────────────────────────────────────────────╯ │
+2026-06-11T06:11:12.881Z ╰──────────────────────────────────────────────────────────────────────────────╯
+2026-06-11T06:11:12.881Z ResponseHandlingException: All connection attempts failed
+2026-06-11T06:11:18.977Z INFO:     127.0.0.1:53208 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:11:49.470Z INFO:     127.0.0.1:53294 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:12:20.933Z INFO:     127.0.0.1:46594 - "GET /health HTTP/1.1" 200 OK
+2026-06-11T06:12:27.346Z ╭────────────────────────── Tracing Preference Saved ──────────────────────────╮
+2026-06-11T06:12:27.346Z │                                                                              │
+2026-06-11T06:12:27.346Z │  Info: Tracing has been disabled.                                            │
+2026-06-11T06:12:27.346Z │                                                                              │
+2026-06-11T06:12:27.346Z │  Your preference has been saved. Future Crew/Flow executions will not        │
+2026-06-11T06:12:27.346Z │  collect traces.                                                             │
+2026-06-11T06:12:27.346Z │                                                                              │
+2026-06-11T06:12:27.346Z │  To enable tracing later, do any one of these:                               │
+2026-06-11T06:12:27.346Z │  • Set tracing=True in your Crew/Flow code                                   │
+2026-06-11T06:12:27.346Z │  • Set CREWAI_TRACING_ENABLED=true in your project's .env file               │
+2026-06-11T06:12:27.346Z │  • Run: crewai traces enable                                                 │
+2026-06-11T06:12:27.346Z │                                                                              │
+2026-06-11T06:12:27.346Z ╰──────────────────────────────────────────────────────────────────────────────╯
+2026-06-11T06:12:27.392Z 2026-06-11 06:12:27 [info     ] agent.run.done                 session_id=test-002 slug=vuln-analysis
+2026-06-11T06:12:27.421Z 2026-06-11 06:12:27 [info     ] agent.response                 request_id=035bb0cc-f2cb-4034-b297-a0ce8177c51d slug=vuln-analysis tokens=0
+2026-06-11T06:12:27.421Z INFO:     10.0.1.10:54716 - "POST /agent/vuln-analysis HTTP/1.1" 200 OK
