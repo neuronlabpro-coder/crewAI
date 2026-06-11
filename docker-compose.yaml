@@ -39,6 +39,7 @@ services:
       dockerfile: Dockerfile
     image: neuronguard-agents-panel:latest
     restart: always
+    env_file: .env
     environment:
       - NODE_ENV=production
       - PORT=3001
