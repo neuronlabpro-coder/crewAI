@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "insforge": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@insforge/mcp@latest"
+      ],
+      "env": {
+        "API_KEY": "ik_a03274c1a46329424831743e480e7f1026957f4894b22f88201412e0198dc6b0",
+        "API_BASE_URL": "https://neurona-aplication-backend.shyntai.com"
+      }
+    }
+  }
+}
