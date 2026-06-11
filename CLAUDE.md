@@ -228,3 +228,28 @@ Ver `NEURONGUARD_AGENTS_SPEC.md` para:
 - Skills MCP por agente
 - Modelos y parámetros
 - Colecciones Qdrant
+
+---
+
+## Agent Admin Panel — Contexto adicional
+
+### InsForge/PostgREST
+- Base URL: `INSFORGE_URL` (env)
+- Auth: `Authorization: Bearer {INSFORGE_API_KEY}`
+- Tabla principal: `ag_agents`
+- Filtros PostgREST: `?slug=eq.vuln-analysis`, `?active=eq.true`
+- Para actualizar: `PATCH /ag_agents?slug=eq.{slug}`
+- Para crear: `POST /ag_agents`
+- Para listar: `GET /ag_agents?order=name.asc`
+
+### Agents API
+- Base URL: `AGENTS_API_URL` (env) = `https://api-agents.shyntai.com`
+- Auth: `x-api-key` header con `AGENTS_API_KEY` (env)
+- Endpoint: `POST /agent/{slug}`
+- Body: `{session_id, client_id, message}`
+
+### Skills instalados
+Ver `.agents/skills/` para documentación de cada skill.
+Consultar `insforge-integrations` antes de cualquier llamada a InsForge.
+Consultar `senior-frontend` antes de crear componentes UI.
+Consultar `qdrant-clients-sdk` si se necesita interacción con Qdrant.

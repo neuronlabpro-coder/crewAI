@@ -33,6 +33,17 @@ services:
       timeout: 5s
       retries: 5
 
+  agents-panel:
+    build:
+      context: ./panel
+      dockerfile: Dockerfile
+    image: neuronguard-agents-panel:latest
+    restart: always
+    env_file: ./panel/.env.local
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+
 volumes:
   redis-data:
     driver: local
