@@ -1,18 +1,49 @@
+# Secrets
 .env
 .env.*
+
+# Git
 .git
 .gitignore
+.github
+
+# Python cache
 __pycache__
 *.pyc
 *.pyo
+*.pyd
 .pytest_cache
 .mypy_cache
 .ruff_cache
+
+# Virtual environments
 .venv
 venv
+
+# Logs
 *.log
+
+# Docker overrides
 docker-compose.override.yml
+
+# Dev/docs (not needed in image)
 tests/
 docs/
 *.md
 .claude/
+
+# crewAI workspace files (this repo is the crewAI dev workspace — exclude all of it)
+lib/
+scripts/
+.agents/
+conftest.py
+.python-version
+pyproject.toml
+uv.lock
+.pre-commit-config.yaml
+.editorconfig
+
+# Data/spec files not needed at runtime
+*.json
+*.zip
+INSTRUCCION-DOCKER-CLAUDECODE.md
