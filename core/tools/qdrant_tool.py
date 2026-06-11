@@ -2,7 +2,6 @@ import asyncio
 
 from openai import AsyncOpenAI
 from qdrant_client import AsyncQdrantClient
-from qdrant_client.models import ScoredPoint
 import structlog
 
 from core.config import settings
@@ -33,6 +32,7 @@ class QdrantRAG:
             self._qdrant_client = AsyncQdrantClient(
                 url=settings.QDRANT_URL,
                 api_key=settings.QDRANT_API_KEY or None,
+                check_compatibility=False,
             )
         return self._qdrant_client
 
@@ -63,11 +63,12 @@ class QdrantRAG:
             query_vector = vectors[0]
 
             qdrant = self._get_qdrant_client()
-            results: list[ScoredPoint] = await qdrant.search(
+            results = await qdrant.query_points(
                 collection_name=collection,
-                query_vector=query_vector,
+                query=query_vector,
                 limit=k,
                 score_threshold=settings.QDRANT_SCORE_THRESHOLD,
+                with_payload=True,
             )
 
             return [
@@ -77,7 +78,7 @@ class QdrantRAG:
                     "content": (r.payload or {}).get("content", ""),
                     "metadata": r.payload or {},
                 }
-                for r in results
+                for r in results.points
             ]
         except Exception:
             log.exception(
