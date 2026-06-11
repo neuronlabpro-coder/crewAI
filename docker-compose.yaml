@@ -9,8 +9,6 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-      qdrant:
-        condition: service_started
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
@@ -20,8 +18,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 8G
-          cpus: "4.0"
+          memory: 4G
+          cpus: "2.0"
 
   redis:
     image: redis:7-alpine
@@ -35,23 +33,6 @@ services:
       timeout: 5s
       retries: 5
 
-  qdrant:
-    image: qdrant/qdrant:v1.9.0
-    restart: always
-    volumes:
-      - qdrant-data:/qdrant/storage
-    environment:
-      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY}
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
 volumes:
   redis-data:
     driver: local
-  qdrant-data:
-    driver: local
-
