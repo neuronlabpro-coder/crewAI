@@ -5,8 +5,12 @@ NEVER modify without team consensus.
 """
 from __future__ import annotations
 
+import asyncio
 import re
+import time
+import uuid
 from typing import Any, ClassVar
+import httpx
 import structlog
 from openai import AsyncOpenAI
 
@@ -47,6 +51,53 @@ def _llm_client(model: str) -> tuple[AsyncOpenAI, str]:
         ),
         model,  # dev model set per agent
     )
+
+
+_INSFORGE_DB = f"{settings.INSFORGE_URL.rstrip('/')}/api/database/records"
+_INSFORGE_HEADERS = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {settings.INSFORGE_API_KEY}",
+}
+
+
+async def _log_to_insforge(
+    session_id: str,
+    agent_slug: str,
+    client_id: str,
+    tokens_used: int,
+    model_used: str,
+    response_time_ms: int,
+) -> None:
+    """Insert session + usage records into InsForge (best-effort, never raises)."""
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as http:
+            await asyncio.gather(
+                http.post(
+                    f"{_INSFORGE_DB}/ag_sessions",
+                    json={
+                        "session_id":  session_id,
+                        "agent_slug":  agent_slug,
+                        "client_id":   client_id or None,
+                    },
+                    headers=_INSFORGE_HEADERS,
+                ),
+                http.post(
+                    f"{_INSFORGE_DB}/ag_usage_logs",
+                    json={
+                        "log_id":           str(uuid.uuid4()),
+                        "session_id":       session_id,
+                        "agent_slug":       agent_slug,
+                        "client_id":        client_id or None,
+                        "tokens_used":      tokens_used,
+                        "model_used":       model_used,
+                        "response_time_ms": response_time_ms,
+                    },
+                    headers=_INSFORGE_HEADERS,
+                ),
+                return_exceptions=True,
+            )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("insforge.log.failed", error=str(exc))
 
 
 class NeuronGuardAgent:
@@ -132,6 +183,7 @@ class NeuronGuardAgent:
         # 5. LLM call
         active_model = self.llm_model_prod if settings.is_production else self.llm_model
         client, resolved_model = _llm_client(active_model)
+        _start_time = time.monotonic()
 
         try:
             extra: dict = {}
@@ -161,6 +213,18 @@ class NeuronGuardAgent:
         await append_history(self.slug, session_id, "assistant", response)
 
         log.info("agent.run.ok", model=resolved_model, tokens=tokens_used)
+
+        # 7. Log to InsForge (fire-and-forget — never block the response)
+        asyncio.create_task(
+            _log_to_insforge(
+                session_id=session_id,
+                agent_slug=self.slug,
+                client_id=client_id,
+                tokens_used=tokens_used,
+                model_used=resolved_model,
+                response_time_ms=int((time.monotonic() - _start_time) * 1000),
+            )
+        )
 
         return {
             "session_id": session_id,

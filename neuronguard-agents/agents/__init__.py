@@ -1,4 +1,4 @@
-"""Auto-registry of all 42 NeuronGuard agents."""
+"""Auto-registry of all 47 NeuronGuard agents (30 expert + 12 teacher + 5 installable)."""
 from typing import Type
 from core.agent_base import NeuronGuardAgent
 
@@ -48,6 +48,13 @@ from agents.teach_devsecops import TeachDevSecOpsAgent
 from agents.teach_compliance import TeachComplianceAgent
 from agents.teach_evaluator import TeachEvaluatorAgent
 
+# Installable agents (INST-01 … INST-05)
+from agents.server_scan import ServerScanAgent
+from agents.log_analysis import LogAnalysisAgent
+from agents.secret_scan import SecretScanAgent
+from agents.container_audit import ContainerAuditAgent
+from agents.red_team import RedTeamAgent
+
 _ALL_AGENTS: list[Type[NeuronGuardAgent]] = [
     # Expert
     VulnAnalysisAgent, PentestWebAgent, PentestNetworkAgent, ApiSecurityAgent,
@@ -63,6 +70,9 @@ _ALL_AGENTS: list[Type[NeuronGuardAgent]] = [
     TeachEthicalHackingAgent, TeachWebSecurityAgent, TeachBlueteamAgent,
     TeachMalwareAgent, TeachOsintAgent, TeachCloudAgent,
     TeachDevSecOpsAgent, TeachComplianceAgent, TeachEvaluatorAgent,
+    # Installable
+    ServerScanAgent, LogAnalysisAgent, SecretScanAgent,
+    ContainerAuditAgent, RedTeamAgent,
 ]
 
 AGENT_REGISTRY: dict[str, Type[NeuronGuardAgent]] = {
