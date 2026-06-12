@@ -9,6 +9,10 @@ export interface Agent {
   llm_model_prod?: string
   max_tokens?: number
   temperature?: number
+  top_p?: number
+  verbose?: boolean
+  allow_delegation?: boolean
+  max_iter?: number
   mcp_domains?: string[]
   qdrant_collection?: string
   agent_type?: 'expert' | 'teacher'
@@ -28,6 +32,10 @@ export interface AgentFormData {
   llm_model_prod: string
   max_tokens: number
   temperature: number
+  top_p: number
+  verbose: boolean
+  allow_delegation: boolean
+  max_iter: number
   mcp_domains: string[]
   qdrant_collection: string
   agent_type: 'expert' | 'teacher'
@@ -64,13 +72,17 @@ export interface PlaygroundResponse {
 }
 
 export const FEATHERLESS_MODELS = [
+  'deepseek-ai/DeepSeek-V4-Pro',
+  'google/gemma-4-26B-A4B-it',
   'moonshotai/Kimi-K2.6',
   'moonshotai/Kimi-K2-Thinking',
-  'deepseek-ai/DeepSeek-V4-Pro',
   'zai-org/GLM-5.1',
 ] as const
 
 export const OPENROUTER_MODELS = [
+  'anthropic/claude-sonnet-4-7',
+  'openai/gpt-4.1',
+  'openai/gpt-4.1-mini',
   'anthropic/claude-fable-5',
   'openai/gpt-5.5',
 ] as const

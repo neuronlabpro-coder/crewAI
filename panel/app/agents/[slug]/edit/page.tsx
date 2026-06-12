@@ -49,7 +49,7 @@ export default function EditAgentPage() {
   }
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8">
       <div className="mb-6">
         <h1 className="font-display text-[2rem] font-medium text-ink leading-none tracking-[-0.03em]">
           Editar Agente

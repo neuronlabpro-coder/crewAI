@@ -46,7 +46,7 @@ export default async function Dashboard() {
       </div>
 
       {/* Stats — card: surface/white light | surface-card/#181818 dark */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {stats.map(({ label, value }) => (
           <div key={label} className="p-6 rounded-lg border border-line bg-panel">
             {/* caption-uppercase: 11px/600/0.88px */}
