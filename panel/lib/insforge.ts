@@ -84,3 +84,64 @@ export async function deactivateAgent(slug: string): Promise<void> {
   )
   if (!res.ok) throw new Error(`InsForge error ${res.status}: ${await res.text()}`)
 }
+
+// ── Usage / Analytics ────────────────────────────────────────────────────────
+
+export interface UsageLog {
+  log_id:           string
+  session_id:       string
+  agent_slug:       string
+  client_id:        string | null
+  tokens_used:      number
+  model_used:       string
+  response_time_ms: number
+  created_at:       string
+}
+
+/** Logs from the last N days (default 7). Returns [] if table doesn't exist yet. */
+export async function getUsageLogs(days = 7): Promise<UsageLog[]> {
+  const { db, key } = getConfig()
+  const since = new Date(Date.now() - days * 86_400_000).toISOString()
+  try {
+    const res = await fetch(
+      `${db}/ag_usage_logs?created_at=gte.${encodeURIComponent(since)}&order=created_at.asc`,
+      { headers: headers(key), cache: 'no-store' }
+    )
+    if (!res.ok) return []
+    return res.json()
+  } catch {
+    return []
+  }
+}
+
+export interface DailyBucket { date: string; requests: number; tokens: number }
+
+/** Aggregate usage logs into daily buckets for the last N days. */
+export function bucketByDay(logs: UsageLog[], days = 7): DailyBucket[] {
+  const buckets: Record<string, DailyBucket> = {}
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86_400_000)
+    const key = d.toISOString().slice(0, 10)
+    buckets[key] = { date: key, requests: 0, tokens: 0 }
+  }
+  for (const log of logs) {
+    const day = log.created_at.slice(0, 10)
+    if (buckets[day]) {
+      buckets[day].requests += 1
+      buckets[day].tokens   += log.tokens_used ?? 0
+    }
+  }
+  return Object.values(buckets)
+}
+
+/** Top N most-called agents from the logs. */
+export function topAgents(logs: UsageLog[], n = 5): { slug: string; count: number }[] {
+  const counts: Record<string, number> = {}
+  for (const log of logs) {
+    counts[log.agent_slug] = (counts[log.agent_slug] ?? 0) + 1
+  }
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([slug, count]) => ({ slug, count }))
+}
