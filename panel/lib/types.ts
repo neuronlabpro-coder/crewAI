@@ -10,6 +10,11 @@ export interface Agent {
   max_tokens?: number
   temperature?: number
   top_p?: number
+  top_k?: number
+  frequency_penalty?: number
+  presence_penalty?: number
+  repetition_penalty?: number
+  min_p?: number
   verbose?: boolean
   allow_delegation?: boolean
   max_iter?: number
@@ -33,6 +38,11 @@ export interface AgentFormData {
   max_tokens: number
   temperature: number
   top_p: number
+  top_k: number
+  frequency_penalty: number
+  presence_penalty: number
+  repetition_penalty: number
+  min_p: number
   verbose: boolean
   allow_delegation: boolean
   max_iter: number

@@ -62,6 +62,11 @@ class NeuronGuardAgent:
     max_tokens: ClassVar[int] = 2048
     temperature: ClassVar[float] = 0.1
     top_p: ClassVar[float] = 1.0
+    top_k: ClassVar[int] = 0
+    frequency_penalty: ClassVar[float] = 0.0
+    presence_penalty: ClassVar[float] = 0.0
+    repetition_penalty: ClassVar[float] = 1.0
+    min_p: ClassVar[float] = 0.0
     max_iter: ClassVar[int] = 25
     verbose: ClassVar[bool] = False
     allow_delegation: ClassVar[bool] = False
@@ -129,12 +134,20 @@ class NeuronGuardAgent:
         client, resolved_model = _llm_client(active_model)
 
         try:
+            extra: dict = {}
+            if self.top_k:             extra["top_k"]              = self.top_k
+            if self.frequency_penalty: extra["frequency_penalty"]  = self.frequency_penalty
+            if self.presence_penalty:  extra["presence_penalty"]   = self.presence_penalty
+            if self.repetition_penalty != 1.0: extra["repetition_penalty"] = self.repetition_penalty
+            if self.min_p:             extra["min_p"]              = self.min_p
+
             completion = await client.chat.completions.create(
                 model=resolved_model,
                 messages=messages,   # type: ignore[arg-type]
                 max_tokens=self.max_tokens,
                 temperature=self.temperature,
                 top_p=self.top_p,
+                extra_body=extra if extra else None,
             )
             raw_response = completion.choices[0].message.content or ""
             tokens_used = completion.usage.total_tokens if completion.usage else 0

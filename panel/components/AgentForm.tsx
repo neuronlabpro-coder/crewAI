@@ -28,23 +28,28 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
   const isCreate = !initialData
 
   const [form, setForm] = useState<AgentFormData>({
-    name:              initialData?.name             ?? '',
-    slug:              initialData?.slug             ?? '',
-    role:              initialData?.role             ?? '',
-    goal:              initialData?.goal             ?? '',
-    backstory:         initialData?.backstory        ?? '',
-    llm_model:         initialData?.llm_model        ?? 'deepseek-ai/DeepSeek-V4-Pro',
-    llm_model_prod:    initialData?.llm_model_prod   ?? 'anthropic/claude-sonnet-4-7',
-    max_tokens:        initialData?.max_tokens       ?? 2048,
-    temperature:       initialData?.temperature      ?? 0.1,
-    top_p:             initialData?.top_p            ?? 1.0,
-    verbose:           initialData?.verbose          ?? false,
-    allow_delegation:  initialData?.allow_delegation ?? false,
-    max_iter:          initialData?.max_iter         ?? 25,
-    mcp_domains:       initialData?.mcp_domains      ?? [],
-    qdrant_collection: initialData?.qdrant_collection ?? '',
-    agent_type:        initialData?.agent_type       ?? 'expert',
-    active:            initialData?.active !== false,
+    name:               initialData?.name               ?? '',
+    slug:               initialData?.slug               ?? '',
+    role:               initialData?.role               ?? '',
+    goal:               initialData?.goal               ?? '',
+    backstory:          initialData?.backstory          ?? '',
+    llm_model:          initialData?.llm_model          ?? 'deepseek-ai/DeepSeek-V4-Pro',
+    llm_model_prod:     initialData?.llm_model_prod     ?? 'anthropic/claude-fable-5',
+    max_tokens:         initialData?.max_tokens         ?? 2048,
+    temperature:        initialData?.temperature        ?? 0.1,
+    top_p:              initialData?.top_p              ?? 1.0,
+    top_k:              initialData?.top_k              ?? 0,
+    frequency_penalty:  initialData?.frequency_penalty  ?? 0.0,
+    presence_penalty:   initialData?.presence_penalty   ?? 0.0,
+    repetition_penalty: initialData?.repetition_penalty ?? 1.0,
+    min_p:              initialData?.min_p              ?? 0.0,
+    verbose:            initialData?.verbose            ?? false,
+    allow_delegation:   initialData?.allow_delegation   ?? false,
+    max_iter:           initialData?.max_iter           ?? 25,
+    mcp_domains:        initialData?.mcp_domains        ?? [],
+    qdrant_collection:  initialData?.qdrant_collection  ?? '',
+    agent_type:         initialData?.agent_type         ?? 'expert',
+    active:             initialData?.active !== false,
   })
 
   const [domainInput, setDomainInput] = useState('')
@@ -95,6 +100,30 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
   const field   = 'w-full h-9 px-3 rounded-md border border-line bg-panel text-ink text-sm placeholder:text-dim outline-none focus:border-cta transition-colors'
   const section = 'space-y-5 p-6 rounded-lg border border-line bg-panel'
   const lbl     = 'block font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-1.5'
+
+  /* Reusable slider component */
+  function Slider({
+    label, value, min, max, step, onChange, fmt,
+  }: {
+    label: string; value: number; min: number; max: number; step: number
+    onChange: (v: number) => void; fmt?: (v: number) => string
+  }) {
+    const display = fmt ? fmt(value) : value.toString()
+    return (
+      <div>
+        <label className={lbl}>
+          {label} — <span className="text-ok normal-case tracking-normal">{display}</span>
+        </label>
+        <input type="range" min={min} max={max} step={step} value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-full accent-[var(--c-cta)] mt-1" />
+        <div className="flex justify-between text-xs text-dim mt-1">
+          <span>{fmt ? fmt(min) : min}</span>
+          <span>{fmt ? fmt(max) : max}</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -175,73 +204,57 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
           </div>
         </div>
 
-        {/* Sliders row 1: max_tokens + temperature */}
+        {/* Row: max_tokens + temperature */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className={lbl}>
-              Max Tokens — <span className="text-ok normal-case tracking-normal">{form.max_tokens}</span>
-            </label>
-            <input type="range" min={256} max={8192} step={256} value={form.max_tokens}
-              onChange={(e) => set('max_tokens', Number(e.target.value))}
-              className="w-full accent-[var(--c-cta)] mt-1" />
-            <div className="flex justify-between text-xs text-dim mt-1">
-              <span>256</span><span>8192</span>
-            </div>
-          </div>
-          <div>
-            <label className={lbl}>
-              Temperature — <span className="text-ok normal-case tracking-normal">{form.temperature.toFixed(2)}</span>
-            </label>
-            <input type="range" min={0} max={1} step={0.01} value={form.temperature}
-              onChange={(e) => set('temperature', Number(e.target.value))}
-              className="w-full accent-[var(--c-cta)] mt-1" />
-            <div className="flex justify-between text-xs text-dim mt-1">
-              <span>0.00</span><span>1.00</span>
-            </div>
-          </div>
+          <Slider label="Max Tokens"   value={form.max_tokens}  min={256}  max={8192} step={256}
+            onChange={(v) => set('max_tokens', v)} />
+          <Slider label="Temperature"  value={form.temperature} min={0}    max={2}    step={0.01}
+            onChange={(v) => set('temperature', v)} fmt={(v) => v.toFixed(2)} />
         </div>
 
-        {/* Sliders row 2: top_p + max_iter */}
+        {/* Row: top_p + top_k */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className={lbl}>
-              Top P — <span className="text-ok normal-case tracking-normal">{form.top_p.toFixed(2)}</span>
-            </label>
-            <input type="range" min={0} max={1} step={0.01} value={form.top_p}
-              onChange={(e) => set('top_p', Number(e.target.value))}
-              className="w-full accent-[var(--c-cta)] mt-1" />
-            <div className="flex justify-between text-xs text-dim mt-1">
-              <span>0.00</span><span>1.00</span>
-            </div>
-          </div>
-          <div>
-            <label className={lbl}>
-              Max Iterations (CrewAI) — <span className="text-ok normal-case tracking-normal">{form.max_iter}</span>
-            </label>
-            <input type="range" min={1} max={100} step={1} value={form.max_iter}
-              onChange={(e) => set('max_iter', Number(e.target.value))}
-              className="w-full accent-[var(--c-cta)] mt-1" />
-            <div className="flex justify-between text-xs text-dim mt-1">
-              <span>1</span><span>100</span>
-            </div>
-          </div>
+          <Slider label="Top P"  value={form.top_p} min={0} max={1} step={0.01}
+            onChange={(v) => set('top_p', v)} fmt={(v) => v.toFixed(2)} />
+          <Slider label="Top K (0 = desactivado)" value={form.top_k} min={0} max={200} step={1}
+            onChange={(v) => set('top_k', v)} />
         </div>
 
-        {/* Toggles row: verbose + allow_delegation */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-          <div className="flex items-center justify-between p-3 rounded-md border border-line bg-raised">
-            <div>
-              <p className="text-sm font-medium text-ink">Verbose</p>
-              <p className="text-xs text-dim mt-0.5">Muestra razonamiento paso a paso</p>
+        {/* Row: frequency_penalty + presence_penalty */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Slider label="Frequency Penalty" value={form.frequency_penalty} min={-2} max={2} step={0.01}
+            onChange={(v) => set('frequency_penalty', v)} fmt={(v) => v.toFixed(2)} />
+          <Slider label="Presence Penalty"  value={form.presence_penalty}  min={-2} max={2} step={0.01}
+            onChange={(v) => set('presence_penalty', v)} fmt={(v) => v.toFixed(2)} />
+        </div>
+
+        {/* Row: repetition_penalty + min_p */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Slider label="Repetition Penalty" value={form.repetition_penalty} min={0.5} max={2} step={0.01}
+            onChange={(v) => set('repetition_penalty', v)} fmt={(v) => v.toFixed(2)} />
+          <Slider label="Min P" value={form.min_p} min={0} max={1} step={0.01}
+            onChange={(v) => set('min_p', v)} fmt={(v) => v.toFixed(2)} />
+        </div>
+
+        {/* Row: max_iter + toggles */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Slider label="Max Iterations (CrewAI)" value={form.max_iter} min={1} max={100} step={1}
+            onChange={(v) => set('max_iter', v)} />
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 rounded-md border border-line bg-raised">
+              <div>
+                <p className="text-sm font-medium text-ink">Verbose</p>
+                <p className="text-xs text-dim mt-0.5">Muestra razonamiento paso a paso</p>
+              </div>
+              <Switch checked={form.verbose} onCheckedChange={(v) => set('verbose', v)} />
             </div>
-            <Switch checked={form.verbose} onCheckedChange={(v) => set('verbose', v)} />
-          </div>
-          <div className="flex items-center justify-between p-3 rounded-md border border-line bg-raised">
-            <div>
-              <p className="text-sm font-medium text-ink">Allow Delegation</p>
-              <p className="text-xs text-dim mt-0.5">Puede delegar tareas a otros agentes</p>
+            <div className="flex items-center justify-between p-3 rounded-md border border-line bg-raised">
+              <div>
+                <p className="text-sm font-medium text-ink">Allow Delegation</p>
+                <p className="text-xs text-dim mt-0.5">Puede delegar a otros agentes</p>
+              </div>
+              <Switch checked={form.allow_delegation} onCheckedChange={(v) => set('allow_delegation', v)} />
             </div>
-            <Switch checked={form.allow_delegation} onCheckedChange={(v) => set('allow_delegation', v)} />
           </div>
         </div>
       </div>
@@ -249,7 +262,8 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
       {/* ── RAG & Skills ──────────────────────────── */}
       <div className={section}>
         <p className={`${lbl} !mb-4`}>RAG & Skills</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {/* Qdrant */}
           <div>
             <label className={lbl}>Colección Qdrant</label>
             <p className="text-xs text-dim mb-1.5">
@@ -260,11 +274,15 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
               placeholder={`ag_${(form.slug || 'mi-agente').replace(/-/g, '_')}`}
               className={`${field} font-mono`} />
           </div>
+
+          {/* MCP Domains */}
           <div>
             <label className={lbl}>
               Dominios MCP <span className="text-dim normal-case tracking-normal font-sans font-normal">— Enter o coma para añadir</span>
             </label>
-            <div className="flex flex-wrap gap-2 p-3 rounded-md border border-line bg-panel min-h-[42px] focus-within:border-cta transition-colors">
+            {/* same height as the qdrant description line */}
+            <p className="text-xs text-dim mb-1.5 invisible select-none" aria-hidden>placeholder</p>
+            <div className="flex flex-wrap gap-2 p-3 rounded-md border border-line bg-panel min-h-[36px] focus-within:border-cta transition-colors">
               {form.mcp_domains.map((d) => (
                 <span key={d} className="flex items-center gap-1 bg-raised border border-line text-body text-xs px-2 py-0.5 rounded-sm font-mono">
                   {d}
