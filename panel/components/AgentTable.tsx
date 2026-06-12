@@ -4,9 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { Agent } from '@/lib/types'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 interface Props {
   agents: Agent[]
@@ -15,15 +12,15 @@ interface Props {
 
 export default function AgentTable({ agents, onRefresh }: Props) {
   const router = useRouter()
-  const [search, setSearch] = useState('')
-  const [typeFilter, setTypeFilter] = useState<'all' | 'expert' | 'teacher'>('all')
+  const [search, setSearch]             = useState('')
+  const [typeFilter, setTypeFilter]     = useState<'all' | 'expert' | 'teacher'>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
 
   const filtered = agents.filter((a) => {
     const matchSearch =
       a.name.toLowerCase().includes(search.toLowerCase()) ||
       a.slug.toLowerCase().includes(search.toLowerCase())
-    const matchType = typeFilter === 'all' || a.agent_type === typeFilter
+    const matchType   = typeFilter === 'all' || a.agent_type === typeFilter
     const matchStatus =
       statusFilter === 'all' ||
       (statusFilter === 'active' ? a.active !== false : a.active === false)
@@ -37,148 +34,120 @@ export default function AgentTable({ agents, onRefresh }: Props) {
     router.refresh()
   }
 
-  function copyUrl(url: string) {
-    navigator.clipboard.writeText(url)
-  }
+  const filterBtn = (active: boolean) =>
+    `px-3 py-1 text-xs font-display font-medium rounded-md border transition-colors ${
+      active
+        ? 'bg-cta text-white border-cta'
+        : 'bg-panel text-dim border-line hover:border-dim hover:text-ink'
+    }`
 
   return (
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3 items-center">
-        <Input
+        <input
+          type="text"
           placeholder="Buscar por nombre o slug…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-xs bg-[#0f0f1a] border-[#1a1a2e] text-[#e2e8f0] placeholder:text-[#4a5568]"
+          className="h-8 px-3 text-sm rounded-md border border-line bg-panel text-ink placeholder:text-dim outline-none focus:border-hi max-w-xs w-full transition-colors"
         />
         <div className="flex gap-1">
-          {(['all', 'expert', 'teacher'] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTypeFilter(t)}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
-                typeFilter === t
-                  ? 'bg-[#00ff88] text-[#0a0a0f]'
-                  : 'bg-[#0f0f1a] text-[#6b7884] border border-[#1a1a2e] hover:border-[#00ff88]'
-              }`}
-            >
-              {t === 'all' ? 'Todos' : t === 'expert' ? 'Expert' : 'Teacher'}
-            </button>
-          ))}
+          <button onClick={() => setTypeFilter('all')}     className={filterBtn(typeFilter === 'all')}>Todos</button>
+          <button onClick={() => setTypeFilter('expert')}  className={filterBtn(typeFilter === 'expert')}>Expert</button>
+          <button onClick={() => setTypeFilter('teacher')} className={filterBtn(typeFilter === 'teacher')}>Teacher</button>
         </div>
         <div className="flex gap-1">
-          {(['all', 'active', 'inactive'] as const).map((s) => (
-            <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
-                statusFilter === s
-                  ? 'bg-[#00ff88] text-[#0a0a0f]'
-                  : 'bg-[#0f0f1a] text-[#6b7884] border border-[#1a1a2e] hover:border-[#00ff88]'
-              }`}
-            >
-              {s === 'all' ? 'Todos' : s === 'active' ? 'Activo' : 'Inactivo'}
-            </button>
-          ))}
+          <button onClick={() => setStatusFilter('all')}      className={filterBtn(statusFilter === 'all')}>Todos</button>
+          <button onClick={() => setStatusFilter('active')}   className={filterBtn(statusFilter === 'active')}>Activo</button>
+          <button onClick={() => setStatusFilter('inactive')} className={filterBtn(statusFilter === 'inactive')}>Inactivo</button>
         </div>
-        <span className="text-xs text-[#4a5568] ml-auto">{filtered.length} agentes</span>
+        <span className="font-display text-[0.72rem] tracking-[0.10em] text-dim ml-auto">
+          {filtered.length} agentes
+        </span>
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border border-[#1a1a2e] overflow-hidden">
+      <div className="rounded-lg border border-line overflow-hidden bg-panel">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[#1a1a2e] bg-[#0f0f1a]">
-              <th className="text-left px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Nombre</th>
-              <th className="text-left px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Slug</th>
-              <th className="text-left px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Tipo</th>
-              <th className="text-left px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Modelo Dev</th>
-              <th className="text-left px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Estado</th>
-              <th className="text-right px-4 py-3 text-[#6b7884] font-medium uppercase tracking-wider text-xs">Acciones</th>
+            <tr className="border-b border-line bg-raised">
+              {['Nombre', 'Slug', 'Tipo', 'Modelo Dev', 'Estado', ''].map((h) => (
+                <th
+                  key={h}
+                  className={`px-4 py-3 font-display text-[0.65rem] font-medium tracking-[0.12em] uppercase text-dim ${h === '' ? 'text-right' : 'text-left'}`}
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-[#4a5568]">
-                  No hay agentes que coincidan con los filtros
+                <td colSpan={6} className="text-center py-12 text-dim text-sm">
+                  No hay agentes que coincidan
                 </td>
               </tr>
             )}
             {filtered.map((agent) => (
-              <tr
-                key={agent.slug}
-                className="border-b border-[#1a1a2e] hover:bg-[#0f0f1a] transition-colors"
-              >
-                <td className="px-4 py-3 text-[#e2e8f0] font-medium">{agent.name}</td>
+              <tr key={agent.slug} className="border-b border-line last:border-0 hover:bg-raised transition-colors">
+                {/* Nombre */}
+                <td className="px-4 py-3 text-ink font-medium">{agent.name}</td>
+
+                {/* Slug */}
                 <td className="px-4 py-3">
-                  <code className="text-[#00ff88] text-xs bg-[#0a0a0f] px-2 py-1 rounded">
+                  <code className="text-dim text-xs bg-raised px-2 py-0.5 rounded-sm border border-line">
                     {agent.slug}
                   </code>
                 </td>
+
+                {/* Tipo */}
                 <td className="px-4 py-3">
-                  <Badge
-                    className={
-                      agent.agent_type === 'teacher'
-                        ? 'bg-emerald-900/40 text-emerald-400 border-emerald-700'
-                        : 'bg-blue-900/40 text-blue-400 border-blue-700'
-                    }
-                  >
+                  <span className={`px-2 py-0.5 rounded-sm font-display text-[0.65rem] font-medium tracking-[0.08em] uppercase border ${
+                    agent.agent_type === 'teacher'
+                      ? 'bg-raised text-dim border-line'
+                      : 'bg-raised text-hi border-line'
+                  }`}>
                     {agent.agent_type === 'teacher' ? 'Teacher' : 'Expert'}
-                  </Badge>
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-[#6b7884] text-xs">
+
+                {/* Modelo */}
+                <td className="px-4 py-3 text-dim text-xs font-mono">
                   {agent.llm_model?.split('/')[1] ?? '—'}
                 </td>
+
+                {/* Estado */}
                 <td className="px-4 py-3">
-                  <span
-                    className={`inline-flex items-center gap-1.5 text-xs font-medium ${
-                      agent.active !== false ? 'text-[#00ff88]' : 'text-red-400'
-                    }`}
-                  >
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        agent.active !== false ? 'bg-[#00ff88]' : 'bg-red-400'
-                      }`}
-                    />
+                  <span className={`inline-flex items-center gap-1.5 text-xs ${
+                    agent.active !== false ? 'text-ok' : 'text-dim'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      agent.active !== false ? 'bg-ok' : 'bg-line'
+                    }`} />
                     {agent.active !== false ? 'Activo' : 'Inactivo'}
                   </span>
                 </td>
+
+                {/* Acciones */}
                 <td className="px-4 py-3">
-                  <div className="flex gap-2 justify-end">
-                    <Link href={`/agents/${agent.slug}`}>
-                      <Button size="sm" variant="ghost" className="text-xs text-[#6b7884] hover:text-[#e2e8f0] h-7 px-2">
-                        Ver
-                      </Button>
+                  <div className="flex gap-3 justify-end text-xs text-dim">
+                    <Link href={`/agents/${agent.slug}`} className="hover:text-ink transition-colors">
+                      Ver
                     </Link>
-                    <Link href={`/agents/${agent.slug}/edit`}>
-                      <Button size="sm" variant="ghost" className="text-xs text-[#6b7884] hover:text-[#00ff88] h-7 px-2">
-                        Editar
-                      </Button>
+                    <Link href={`/agents/${agent.slug}/edit`} className="hover:text-ink transition-colors">
+                      Editar
                     </Link>
-                    <Link href={`/agents/${agent.slug}/playground`}>
-                      <Button size="sm" variant="ghost" className="text-xs text-[#6b7884] hover:text-purple-400 h-7 px-2">
-                        ▶ Play
-                      </Button>
+                    <Link href={`/agents/${agent.slug}/playground`} className="hover:text-hi transition-colors">
+                      Playground
                     </Link>
-                    {agent.webhook_url && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-xs text-[#6b7884] hover:text-[#00a3b4] h-7 px-2"
-                        onClick={() => copyUrl(agent.webhook_url!)}
-                      >
-                        Copiar URL
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-xs text-[#6b7884] hover:text-red-400 h-7 px-2"
+                    <button
                       onClick={() => handleDelete(agent.slug)}
+                      className="hover:text-err transition-colors"
                     >
                       Desactivar
-                    </Button>
+                    </button>
                   </div>
                 </td>
               </tr>

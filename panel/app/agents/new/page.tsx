@@ -25,8 +25,10 @@ export default function NewAgentPage() {
   return (
     <div className="p-8 max-w-3xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#e2e8f0]">Nuevo Agente</h1>
-        <p className="text-sm text-[#6b7884] mt-1">
+        <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+          Nuevo Agente
+        </h1>
+        <p className="text-sm text-dim mt-1">
           Configura un nuevo agente para la plataforma NeuronGuard
         </p>
       </div>

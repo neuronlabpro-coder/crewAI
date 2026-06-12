@@ -35,15 +35,17 @@ export default function EditAgentPage() {
   if (error) {
     return (
       <div className="p-8">
-        <div className="p-4 rounded-lg border border-red-800 bg-red-950/30 text-red-400 text-sm">{error}</div>
+        <div className="p-4 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-[#ff4d4d] text-sm">
+          {error}
+        </div>
       </div>
     )
   }
 
   if (!agent) {
     return (
-      <div className="p-8 flex items-center gap-2 text-[#6b7884] text-sm">
-        <span className="animate-pulse">▸</span> Cargando agente…
+      <div className="p-8 flex items-center gap-2 text-dim text-sm">
+        <span className="animate-pulse text-hi">▸</span> Cargando agente…
       </div>
     )
   }
@@ -51,8 +53,10 @@ export default function EditAgentPage() {
   return (
     <div className="p-8 max-w-3xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#e2e8f0]">Editar Agente</h1>
-        <p className="text-sm text-[#6b7884] mt-1 font-mono">{agent.slug}</p>
+        <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+          Editar Agente
+        </h1>
+        <p className="text-sm text-dim mt-1 font-mono">{agent.slug}</p>
       </div>
       <AgentForm initialData={agent} onSubmit={handleSubmit} submitLabel="Guardar Cambios" />
     </div>

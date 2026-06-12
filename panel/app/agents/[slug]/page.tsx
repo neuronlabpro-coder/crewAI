@@ -13,49 +13,52 @@ export default async function AgentDetailPage({ params }: Props) {
   const agent = await getAgent(slug)
   if (!agent) notFound()
 
-  const rows = [
-    { label: 'Slug', value: agent.slug },
-    { label: 'Tipo', value: agent.agent_type },
-    { label: 'Rol', value: agent.role },
-    { label: 'Modelo LLM', value: agent.llm_model },
-    { label: 'Max Tokens', value: agent.max_tokens?.toString() },
+  const infoRows = [
+    { label: 'Slug',        value: agent.slug },
+    { label: 'Tipo',        value: agent.agent_type },
+    { label: 'Rol',         value: agent.role },
+    { label: 'Modelo Dev',  value: agent.llm_model },
+    { label: 'Modelo Prod', value: agent.llm_model_prod },
+    { label: 'Max Tokens',  value: agent.max_tokens?.toString() },
     { label: 'Temperature', value: agent.temperature?.toString() },
-    { label: 'Colección Qdrant', value: agent.qdrant_collection },
-    { label: 'Estado', value: agent.active !== false ? 'Activo' : 'Inactivo' },
+    { label: 'Estado',      value: agent.active !== false ? 'Activo' : 'Inactivo' },
     { label: 'Webhook URL', value: agent.webhook_url },
   ]
 
   return (
     <div className="p-8 space-y-6 max-w-4xl">
+      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-[#e2e8f0]">{agent.name}</h1>
-            <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+            <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+              {agent.name}
+            </h1>
+            <span className={`px-2 py-0.5 rounded-sm font-display text-[0.65rem] font-medium tracking-[0.10em] uppercase border ${
               agent.agent_type === 'teacher'
-                ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-800'
-                : 'bg-blue-900/40 text-blue-400 border border-blue-800'
+                ? 'bg-raised text-dim border-line'
+                : 'bg-raised text-hi border-line'
             }`}>
               {agent.agent_type === 'teacher' ? 'Teacher' : 'Expert'}
             </span>
             {agent.active === false && (
-              <span className="px-2 py-0.5 rounded text-xs font-semibold bg-red-900/40 text-red-400 border border-red-800">
+              <span className="px-2 py-0.5 rounded-sm font-display text-[0.65rem] font-medium tracking-[0.10em] uppercase bg-red-50 dark:bg-red-950/20 text-red-500 dark:text-[#ff4d4d] border border-red-200 dark:border-red-900/50">
                 Inactivo
               </span>
             )}
           </div>
-          <p className="text-sm text-[#6b7884] font-mono">{agent.slug}</p>
+          <p className="text-sm text-dim font-mono">{agent.slug}</p>
         </div>
         <div className="flex gap-2">
           <Link
             href={`/agents/${slug}/playground`}
-            className="px-4 py-2 bg-[#00ff88] text-[#0a0a0f] text-sm font-bold rounded-md hover:bg-[#00e67a] transition-colors"
+            className="px-5 py-2.5 bg-cta text-white text-sm font-display font-medium rounded-md hover:bg-cta-hi transition-colors"
           >
-            ▶ Playground
+            Playground
           </Link>
           <Link
             href={`/agents/${slug}/edit`}
-            className="px-4 py-2 border border-[#1a1a2e] text-[#6b7884] text-sm rounded-md hover:text-[#e2e8f0] hover:border-[#3a3a5e] transition-colors"
+            className="px-5 py-2.5 border border-line text-dim text-sm rounded-md hover:text-ink hover:border-dim transition-colors"
           >
             Editar
           </Link>
@@ -63,39 +66,47 @@ export default async function AgentDetailPage({ params }: Props) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Info */}
-        <div className="rounded-lg border border-[#1a1a2e] bg-[#0f0f1a] p-5 space-y-3">
-          <h2 className="text-xs font-semibold text-[#6b7884] uppercase tracking-wider">Información</h2>
-          {rows.map(({ label, value }) => value && (
-            <div key={label} className="flex justify-between text-sm">
-              <span className="text-[#6b7884]">{label}</span>
-              <span className="text-[#e2e8f0] font-mono text-right max-w-[60%] break-all">{value}</span>
+        {/* Información */}
+        <div className="rounded-lg border border-line bg-panel p-6 space-y-3">
+          <p className="font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-4">
+            Información
+          </p>
+          {infoRows.map(({ label, value }) => value && (
+            <div key={label} className="flex justify-between text-sm gap-4">
+              <span className="text-dim shrink-0">{label}</span>
+              <span className="text-ink font-mono text-right break-all">{value}</span>
             </div>
           ))}
         </div>
 
         {/* Objetivo */}
-        <div className="rounded-lg border border-[#1a1a2e] bg-[#0f0f1a] p-5">
-          <h2 className="text-xs font-semibold text-[#6b7884] uppercase tracking-wider mb-3">Objetivo</h2>
-          <p className="text-sm text-[#e2e8f0] leading-relaxed">{agent.goal}</p>
+        <div className="rounded-lg border border-line bg-panel p-6">
+          <p className="font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-4">
+            Objetivo
+          </p>
+          <p className="text-sm text-ink leading-relaxed">{agent.goal}</p>
         </div>
       </div>
 
       {/* Backstory */}
-      <div className="rounded-lg border border-[#1a1a2e] bg-[#0f0f1a] p-5">
-        <h2 className="text-xs font-semibold text-[#6b7884] uppercase tracking-wider mb-3">System Prompt (Backstory)</h2>
-        <pre className="text-sm text-[#e2e8f0] font-mono leading-relaxed whitespace-pre-wrap max-h-72 overflow-y-auto">
+      <div className="rounded-lg border border-line bg-panel p-6">
+        <p className="font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-4">
+          System Prompt
+        </p>
+        <pre className="text-sm text-ink font-mono leading-relaxed whitespace-pre-wrap max-h-72 overflow-y-auto">
           {agent.backstory}
         </pre>
       </div>
 
       {/* MCP Domains */}
       {agent.mcp_domains && agent.mcp_domains.length > 0 && (
-        <div className="rounded-lg border border-[#1a1a2e] bg-[#0f0f1a] p-5">
-          <h2 className="text-xs font-semibold text-[#6b7884] uppercase tracking-wider mb-3">MCP Domains</h2>
+        <div className="rounded-lg border border-line bg-panel p-6">
+          <p className="font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-4">
+            MCP Domains
+          </p>
           <div className="flex flex-wrap gap-2">
             {agent.mcp_domains.map((d) => (
-              <span key={d} className="px-2 py-1 rounded bg-[#1a1a2e] text-[#00a3b4] text-xs font-mono border border-[#2a2a4e]">
+              <span key={d} className="px-2.5 py-1 rounded-sm bg-raised text-ink text-xs font-mono border border-line">
                 {d}
               </span>
             ))}

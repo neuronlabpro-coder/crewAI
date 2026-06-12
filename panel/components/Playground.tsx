@@ -15,9 +15,9 @@ function genSessionId() {
 
 export default function Playground({ agent }: Props) {
   const [sessionId, setSessionId] = useState(genSessionId)
-  const [messages, setMessages] = useState<PlaygroundMessage[]>([])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [messages, setMessages]   = useState<PlaygroundMessage[]>([])
+  const [input, setInput]         = useState('')
+  const [loading, setLoading]     = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -49,7 +49,6 @@ export default function Playground({ agent }: Props) {
         }),
       })
       const data = await res.json()
-
       if (!res.ok) throw new Error(data.error ?? 'Error en el agente')
 
       const assistantMsg: PlaygroundMessage = {
@@ -89,65 +88,76 @@ export default function Playground({ agent }: Props) {
   return (
     <div className="flex flex-col h-[calc(100vh-180px)] min-h-[500px]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[#1a1a2e] bg-[#0a0a0f]">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-panel">
         <div className="flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-ok animate-pulse" />
           <div>
-            <p className="text-sm font-semibold text-[#e2e8f0]">{agent.name}</p>
-            <p className="text-xs text-[#4a5568] font-mono">{agent.llm_model?.split('/')[1] ?? agent.llm_model}</p>
+            <p className="text-sm font-semibold text-ink">{agent.name}</p>
+            <p className="text-xs text-dim font-mono">{agent.llm_model?.split('/')[1] ?? agent.llm_model}</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="ghost"
-            className="text-xs text-[#6b7884] hover:text-[#00a3b4] border border-[#1a1a2e]"
-            onClick={() => navigator.clipboard.writeText(agent.webhook_url ?? '')}>
+          <button
+            onClick={() => navigator.clipboard.writeText(agent.webhook_url ?? '')}
+            className="text-xs text-dim hover:text-hi border border-line px-3 py-1.5 rounded-md transition-colors">
             Copiar Webhook
-          </Button>
-          <Button size="sm" variant="ghost"
-            className="text-xs text-[#6b7884] hover:text-red-400 border border-[#1a1a2e]"
-            onClick={clearSession}>
+          </button>
+          <button
+            onClick={clearSession}
+            className="text-xs text-dim hover:text-err border border-line px-3 py-1.5 rounded-md transition-colors">
             Nueva sesión
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 font-mono text-sm">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 font-mono text-sm bg-canvas">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center text-[#4a5568]">
+          <div className="flex flex-col items-center justify-center h-full text-center text-dim">
             <p className="text-4xl mb-3">▸</p>
             <p className="text-sm">Escribe un mensaje para iniciar</p>
-            <p className="text-xs mt-1 font-sans">Sesión: <span className="text-[#00ff88]">{sessionId}</span></p>
+            <p className="text-xs mt-1 font-sans">
+              Sesión: <span className="text-ok">{sessionId}</span>
+            </p>
           </div>
         )}
 
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] ${msg.role === 'user'
-              ? 'bg-[#0f1f18] border border-[#00ff88]/30 text-[#00ff88]'
-              : 'bg-[#0f0f1a] border border-[#1a1a2e] text-[#e2e8f0]'
-            } rounded-lg p-4`}>
+            <div className={`max-w-[80%] rounded-lg p-4 ${
+              msg.role === 'user'
+                ? 'bg-raised border border-hi/20 dark:bg-[#0f1f18] dark:border-green-900/30'
+                : 'bg-panel border border-line'
+            }`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`text-xs font-sans font-semibold uppercase tracking-wider ${
-                  msg.role === 'user' ? 'text-[#00ff88]/70' : 'text-[#6b7884]'
+                  msg.role === 'user'
+                    ? 'text-hi dark:text-green-400'
+                    : 'text-dim'
                 }`}>
                   {msg.role === 'user' ? '▸ User' : `▸ ${agent.slug}`}
                 </span>
-                <span className="text-[10px] text-[#4a5568] font-sans ml-auto">
+                <span className="text-[10px] text-dim font-sans ml-auto">
                   {new Date(msg.timestamp).toLocaleTimeString()}
                 </span>
               </div>
-              <pre className="whitespace-pre-wrap font-mono text-xs leading-relaxed">{msg.content}</pre>
+              <pre className={`whitespace-pre-wrap font-mono text-xs leading-relaxed ${
+                msg.role === 'user'
+                  ? 'text-ink dark:text-green-400'
+                  : 'text-ink'
+              }`}>
+                {msg.content}
+              </pre>
               {msg.role === 'assistant' && (msg.model_used || msg.skills_used?.length) && (
-                <div className="mt-3 pt-3 border-t border-[#1a1a2e] flex flex-wrap gap-2 font-sans">
+                <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-2 font-sans">
                   {msg.model_used && (
-                    <span className="text-[10px] text-[#4a5568]">
-                      modelo: <span className="text-[#00a3b4]">{msg.model_used}</span>
+                    <span className="text-[10px] text-dim">
+                      modelo: <span className="text-hi">{msg.model_used}</span>
                     </span>
                   )}
                   {msg.skills_used?.length ? (
-                    <span className="text-[10px] text-[#4a5568]">
-                      skills: <span className="text-[#00ff88]">{msg.skills_used.join(', ')}</span>
+                    <span className="text-[10px] text-dim">
+                      skills: <span className="text-ok">{msg.skills_used.join(', ')}</span>
                     </span>
                   ) : null}
                 </div>
@@ -158,7 +168,7 @@ export default function Playground({ agent }: Props) {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-[#0f0f1a] border border-[#1a1a2e] rounded-lg p-4 text-[#6b7884]">
+            <div className="bg-panel border border-line rounded-lg p-4 text-dim">
               <span className="animate-pulse">▸ procesando</span>
               <span className="animate-ping ml-1">_</span>
             </div>
@@ -168,7 +178,7 @@ export default function Playground({ agent }: Props) {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-[#1a1a2e] bg-[#0a0a0f]">
+      <div className="p-4 border-t border-line bg-panel">
         <div className="flex gap-3">
           <Textarea
             value={input}
@@ -177,10 +187,12 @@ export default function Playground({ agent }: Props) {
             placeholder="Escribe un mensaje… (Enter para enviar, Shift+Enter para nueva línea)"
             rows={2}
             disabled={loading}
-            className="flex-1 bg-[#0f0f1a] border-[#1a1a2e] text-[#e2e8f0] placeholder:text-[#4a5568] font-mono text-sm resize-none focus:border-[#00ff88] focus:ring-0"
+            className="flex-1 bg-raised border-line text-ink placeholder:text-dim font-mono text-sm resize-none focus:border-hi focus:ring-0"
           />
-          <Button onClick={send} disabled={loading || !input.trim()}
-            className="bg-[#00ff88] text-[#0a0a0f] hover:bg-[#00e67a] font-bold self-end px-5">
+          <Button
+            onClick={send}
+            disabled={loading || !input.trim()}
+            className="bg-cta text-white hover:bg-cta-hi dark:bg-ok dark:text-[#0a0a0f] dark:hover:opacity-90 font-bold self-end px-5">
             {loading ? '…' : '▶'}
           </Button>
         </div>

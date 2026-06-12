@@ -1,40 +1,67 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Space_Grotesk, Inter } from 'next/font/google'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import './globals.css'
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700'],
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+})
 
 export const metadata: Metadata = {
   title: 'NeuronGuard Agent Admin',
   description: 'Panel de administración de agentes NeuronGuard',
 }
 
+const navLinks = [
+  { href: '/',           label: 'Dashboard'    },
+  { href: '/agents',     label: 'Agentes'      },
+  { href: '/agents/new', label: 'Nuevo Agente' },
+]
+
 function Sidebar() {
   return (
-    <aside className="w-56 shrink-0 border-r border-[#1a1a2e] bg-[#0a0a0f] flex flex-col min-h-screen">
-      <div className="px-5 py-5 border-b border-[#1a1a2e]">
-        <div className="flex items-center gap-2">
-          <span className="text-[#00ff88] text-xl font-mono font-bold">▸</span>
-          <div>
-            <p className="text-xs font-bold text-[#e2e8f0] tracking-wider uppercase">NeuronGuard</p>
-            <p className="text-[10px] text-[#4a5568] tracking-widest uppercase">Agent Admin</p>
-          </div>
-        </div>
+    <aside className="w-56 shrink-0 border-r border-line bg-panel flex flex-col min-h-screen">
+      {/* Logo */}
+      <div className="px-5 py-5 border-b border-line">
+        <p className="font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-ink">
+          NeuronGuard
+        </p>
+        <p className="font-display text-[0.65rem] tracking-[0.14em] uppercase text-dim mt-0.5">
+          Agent Admin
+        </p>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {[
-          { href: '/', label: 'Dashboard', icon: '◈' },
-          { href: '/agents', label: 'Agentes', icon: '◉' },
-          { href: '/agents/new', label: 'Nuevo Agente', icon: '+' },
-        ].map(({ href, label, icon }) => (
-          <Link key={href} href={href}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-[#6b7884] hover:text-[#00ff88] hover:bg-[#0f0f1a] transition-colors group">
-            <span className="text-[#4a5568] group-hover:text-[#00ff88] font-mono text-xs w-4 text-center">{icon}</span>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5">
+        {navLinks.map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            className="flex items-center px-3 py-2 rounded-md text-sm text-dim hover:text-ink hover:bg-raised transition-colors"
+          >
             {label}
           </Link>
         ))}
       </nav>
-      <div className="px-5 py-4 border-t border-[#1a1a2e]">
-        <p className="text-[10px] text-[#4a5568] tracking-widest uppercase">42 Agentes</p>
-        <p className="text-[10px] text-[#4a5568]">api-agents.shyntai.com</p>
+
+      {/* Theme toggle + footer */}
+      <div className="px-3 pb-2">
+        <ThemeToggle />
+      </div>
+      <div className="px-5 py-4 border-t border-line">
+        <p className="font-display text-[0.65rem] tracking-[0.14em] uppercase text-dim">
+          42 Agentes
+        </p>
+        <p className="text-[0.65rem] text-dim mt-0.5">api-agents.shyntai.com</p>
       </div>
     </aside>
   )
@@ -42,10 +69,12 @@ function Sidebar() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className="dark">
-      <body className="bg-[#0a0a0f] text-[#e2e8f0] min-h-screen flex">
-        <Sidebar />
-        <main className="flex-1 overflow-auto">{children}</main>
+    <html lang="es" className={`${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body className="bg-canvas text-ink min-h-screen flex">
+        <ThemeProvider>
+          <Sidebar />
+          <main className="flex-1 overflow-auto">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   )

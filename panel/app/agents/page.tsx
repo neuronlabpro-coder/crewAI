@@ -17,19 +17,21 @@ export default async function AgentsPage() {
     <div className="p-8 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#e2e8f0]">Agentes</h1>
-          <p className="text-sm text-[#6b7884] mt-1">{agents.length} agentes registrados</p>
+          <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+            Agentes
+          </h1>
+          <p className="text-sm text-dim mt-1">{agents.length} agentes registrados</p>
         </div>
         <Link
           href="/agents/new"
-          className="px-4 py-2 bg-[#00ff88] text-[#0a0a0f] text-sm font-bold rounded-md hover:bg-[#00e67a] transition-colors"
+          className="px-5 py-3 bg-cta text-white text-sm font-display font-medium rounded-md hover:bg-cta-hi transition-colors"
         >
-          + Nuevo Agente
+          Nuevo Agente
         </Link>
       </div>
 
       {error ? (
-        <div className="p-4 rounded-lg border border-red-800 bg-red-950/30 text-red-400 text-sm">
+        <div className="p-4 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-[#ff4d4d] text-sm">
           {error}
         </div>
       ) : (

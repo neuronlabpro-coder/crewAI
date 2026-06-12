@@ -5,9 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* shadcn compat */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -17,11 +18,6 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -38,47 +34,114 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
+  /* radius — adapts to theme */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  /* semantic color tokens */
+  --color-canvas: var(--c-canvas);
+  --color-panel: var(--c-panel);
+  --color-raised: var(--c-raised);
+  --color-line: var(--c-line);
+  --color-ink: var(--c-ink);
+  --color-dim: var(--c-dim);
+  --color-cta: var(--c-cta);
+  --color-cta-hi: var(--c-cta-hi);
+  --color-hi: var(--c-hi);
+  --color-ok: var(--c-ok);
+  --color-err: var(--c-err);
 }
 
+/* ── Airline Altitude — Light ── */
 :root {
-  --radius: 0.5rem;
-  --background: #0a0a0f;
-  --foreground: #e2e8f0;
-  --card: #0f0f1a;
-  --card-foreground: #e2e8f0;
-  --popover: #0f0f1a;
-  --popover-foreground: #e2e8f0;
-  --primary: #00ff88;
-  --primary-foreground: #0a0a0f;
-  --secondary: #1a1a2e;
-  --secondary-foreground: #e2e8f0;
-  --muted: #1a1a2e;
-  --muted-foreground: #6b7884;
-  --accent: #00ff88;
-  --accent-foreground: #0a0a0f;
-  --destructive: #ef4444;
-  --border: #1a1a2e;
-  --input: #0f0f1a;
-  --ring: #00ff88;
-  --chart-1: #00ff88;
-  --chart-2: #00a3b4;
-  --chart-3: #3b82f6;
-  --chart-4: #a855f7;
-  --chart-5: #f59e0b;
-  --sidebar: #0a0a0f;
-  --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #00ff88;
-  --sidebar-primary-foreground: #0a0a0f;
-  --sidebar-accent: #0f0f1a;
-  --sidebar-accent-foreground: #e2e8f0;
-  --sidebar-border: #1a1a2e;
-  --sidebar-ring: #00ff88;
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --background:           #EFF3F6;
+  --foreground:           #15222D;
+  --card:                 #FFFFFF;
+  --card-foreground:      #15222D;
+  --popover:              #FFFFFF;
+  --popover-foreground:   #15222D;
+  --primary:              #00A3B4;
+  --primary-foreground:   #FFFFFF;
+  --secondary:            #EFF3F6;
+  --secondary-foreground: #15222D;
+  --muted:                #EFF3F6;
+  --muted-foreground:     #6B7884;
+  --accent:               #EFF3F6;
+  --accent-foreground:    #15222D;
+  --destructive:          #DC2626;
+  --border:               #D0D9E1;
+  --input:                #FFFFFF;
+  --ring:                 #00A3B4;
+  --sidebar:              #FFFFFF;
+  --sidebar-foreground:   #15222D;
+  --sidebar-primary:      #00A3B4;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:       #EFF3F6;
+  --sidebar-accent-foreground:  #15222D;
+  --sidebar-border:       #D0D9E1;
+  --sidebar-ring:         #00A3B4;
+  --font-mono:            'JetBrains Mono', 'Fira Code', monospace;
+
+  /* semantic tokens */
+  --r-sm: 2px; --r-md: 4px; --r-lg: 8px; --r-xl: 8px;
+  --c-canvas: #EFF3F6;
+  --c-panel:  #FFFFFF;
+  --c-raised: #EFF3F6;
+  --c-line:   #D0D9E1;
+  --c-ink:    #15222D;
+  --c-dim:    #6B7884;
+  --c-cta:    #00A3B4;
+  --c-cta-hi: #0092A0;
+  --c-hi:     #00A3B4;
+  --c-ok:     #00A3B4;
+  --c-err:    #DC2626;
+}
+
+/* ── Composio — Dark ── */
+.dark {
+  --background:           #0f0f0f;
+  --foreground:           #ffffff;
+  --card:                 #181818;
+  --card-foreground:      #ffffff;
+  --popover:              #181818;
+  --popover-foreground:   #ffffff;
+  --primary:              #0007cd;
+  --primary-foreground:   #ffffff;
+  --secondary:            #222222;
+  --secondary-foreground: #ffffff;
+  --muted:                #222222;
+  --muted-foreground:     #888888;
+  --accent:               #222222;
+  --accent-foreground:    #ffffff;
+  --destructive:          #ff4d4d;
+  --border:               #222222;
+  --input:                #181818;
+  --ring:                 #99b8ff;
+  --sidebar:              #181818;
+  --sidebar-foreground:   #ffffff;
+  --sidebar-primary:      #0007cd;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent:       #222222;
+  --sidebar-accent-foreground:  #ffffff;
+  --sidebar-border:       #222222;
+  --sidebar-ring:         #99b8ff;
+
+  /* semantic tokens */
+  --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+  --c-canvas: #0f0f0f;
+  --c-panel:  #181818;
+  --c-raised: #222222;
+  --c-line:   #222222;
+  --c-ink:    #ffffff;
+  --c-dim:    #888888;
+  --c-cta:    #0007cd;
+  --c-cta-hi: #0005a3;
+  --c-hi:     #99b8ff;
+  --c-ok:     #33d17a;
+  --c-err:    #ff4d4d;
 }
 
 * {
@@ -86,14 +149,24 @@
 }
 
 html {
+  color-scheme: light;
+}
+
+html.dark {
   color-scheme: dark;
 }
 
 body {
-  background-color: #0a0a0f;
-  color: #e2e8f0;
-  font-family: var(--font-sans);
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
+  font-family: var(--font-body), Inter, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display), 'Space Grotesk', sans-serif;
 }
 
 /* Scrollbar */
@@ -102,12 +175,12 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
+  background: var(--c-panel);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a1a2e;
+  background: var(--c-line);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00ff88;
+  background: var(--c-dim);
 }
