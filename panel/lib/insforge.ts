@@ -98,6 +98,22 @@ export interface UsageLog {
   created_at:       string
 }
 
+/** Usage logs for a specific agent (last N days). */
+export async function getAgentUsageLogs(slug: string, days = 7): Promise<UsageLog[]> {
+  const { db, key } = getConfig()
+  const since = new Date(Date.now() - days * 86_400_000).toISOString()
+  try {
+    const res = await fetch(
+      `${db}/ag_usage_logs?agent_slug=eq.${encodeURIComponent(slug)}&created_at=gte.${encodeURIComponent(since)}&order=created_at.asc`,
+      { headers: headers(key), cache: 'no-store' }
+    )
+    if (!res.ok) return []
+    return res.json()
+  } catch {
+    return []
+  }
+}
+
 /** Logs from the last N days (default 7). Returns [] if table doesn't exist yet. */
 export async function getUsageLogs(days = 7): Promise<UsageLog[]> {
   const { db, key } = getConfig()
