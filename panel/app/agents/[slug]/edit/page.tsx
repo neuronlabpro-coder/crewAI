@@ -35,9 +35,7 @@ export default function EditAgentPage() {
   if (error) {
     return (
       <div className="p-8">
-        <div className="p-4 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-[#ff4d4d] text-sm">
-          {error}
-        </div>
+        <div className="p-4 rounded-lg border border-err/40 bg-err/10 text-err text-sm">{error}</div>
       </div>
     )
   }
@@ -45,7 +43,7 @@ export default function EditAgentPage() {
   if (!agent) {
     return (
       <div className="p-8 flex items-center gap-2 text-dim text-sm">
-        <span className="animate-pulse text-hi">▸</span> Cargando agente…
+        <span className="animate-pulse text-ok">▸</span> Cargando agente…
       </div>
     )
   }
@@ -53,7 +51,7 @@ export default function EditAgentPage() {
   return (
     <div className="p-8 max-w-3xl">
       <div className="mb-6">
-        <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+        <h1 className="font-display text-[2rem] font-medium text-ink leading-none tracking-[-0.03em]">
           Editar Agente
         </h1>
         <p className="text-sm text-dim mt-1 font-mono">{agent.slug}</p>

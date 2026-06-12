@@ -34,11 +34,12 @@ export default function AgentTable({ agents, onRefresh }: Props) {
     router.refresh()
   }
 
+  /* Active filter btn: light → tertiary #00A3B4 bg | dark → primary #0007cd bg */
   const filterBtn = (active: boolean) =>
     `px-3 py-1 text-xs font-display font-medium rounded-md border transition-colors ${
       active
         ? 'bg-cta text-white border-cta'
-        : 'bg-panel text-dim border-line hover:border-dim hover:text-ink'
+        : 'bg-panel text-dim border-line hover:text-ink'
     }`
 
   return (
@@ -50,7 +51,7 @@ export default function AgentTable({ agents, onRefresh }: Props) {
           placeholder="Buscar por nombre o slug…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-8 px-3 text-sm rounded-md border border-line bg-panel text-ink placeholder:text-dim outline-none focus:border-hi max-w-xs w-full transition-colors"
+          className="h-8 px-3 text-sm rounded-md border border-line bg-panel text-ink placeholder:text-dim outline-none focus:border-cta max-w-xs w-full transition-colors"
         />
         <div className="flex gap-1">
           <button onClick={() => setTypeFilter('all')}     className={filterBtn(typeFilter === 'all')}>Todos</button>
@@ -97,17 +98,17 @@ export default function AgentTable({ agents, onRefresh }: Props) {
 
                 {/* Slug */}
                 <td className="px-4 py-3">
-                  <code className="text-dim text-xs bg-raised px-2 py-0.5 rounded-sm border border-line">
+                  <code className="text-body text-xs bg-raised px-2 py-0.5 rounded-sm border border-line">
                     {agent.slug}
                   </code>
                 </td>
 
-                {/* Tipo */}
+                {/* Tipo — badge-pill: bg=raised, text=ink per Composio badge-pill spec */}
                 <td className="px-4 py-3">
                   <span className={`px-2 py-0.5 rounded-sm font-display text-[0.65rem] font-medium tracking-[0.08em] uppercase border ${
                     agent.agent_type === 'teacher'
                       ? 'bg-raised text-dim border-line'
-                      : 'bg-raised text-hi border-line'
+                      : 'bg-raised text-cta dark:text-ink border-line'
                   }`}>
                     {agent.agent_type === 'teacher' ? 'Teacher' : 'Expert'}
                   </span>
@@ -118,7 +119,7 @@ export default function AgentTable({ agents, onRefresh }: Props) {
                   {agent.llm_model?.split('/')[1] ?? '—'}
                 </td>
 
-                {/* Estado */}
+                {/* Estado — ok = #00A3B4 light / #33d17a dark */}
                 <td className="px-4 py-3">
                   <span className={`inline-flex items-center gap-1.5 text-xs ${
                     agent.active !== false ? 'text-ok' : 'text-dim'
@@ -139,7 +140,7 @@ export default function AgentTable({ agents, onRefresh }: Props) {
                     <Link href={`/agents/${agent.slug}/edit`} className="hover:text-ink transition-colors">
                       Editar
                     </Link>
-                    <Link href={`/agents/${agent.slug}/playground`} className="hover:text-hi transition-colors">
+                    <Link href={`/agents/${agent.slug}/playground`} className="hover:text-ok transition-colors">
                       Playground
                     </Link>
                     <button

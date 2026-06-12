@@ -90,6 +90,7 @@ export default function Playground({ agent }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-panel">
         <div className="flex items-center gap-3">
+          {/* ok = #00A3B4 light (tertiary) / #33d17a dark (semantic-success) */}
           <span className="w-2 h-2 rounded-full bg-ok animate-pulse" />
           <div>
             <p className="text-sm font-semibold text-ink">{agent.name}</p>
@@ -99,7 +100,7 @@ export default function Playground({ agent }: Props) {
         <div className="flex gap-2">
           <button
             onClick={() => navigator.clipboard.writeText(agent.webhook_url ?? '')}
-            className="text-xs text-dim hover:text-hi border border-line px-3 py-1.5 rounded-md transition-colors">
+            className="text-xs text-dim hover:text-ink border border-line px-3 py-1.5 rounded-md transition-colors">
             Copiar Webhook
           </button>
           <button
@@ -117,23 +118,21 @@ export default function Playground({ agent }: Props) {
             <p className="text-4xl mb-3">▸</p>
             <p className="text-sm">Escribe un mensaje para iniciar</p>
             <p className="text-xs mt-1 font-sans">
-              Sesión: <span className="text-ok">{sessionId}</span>
+              Sesión: <span className="text-ok font-mono">{sessionId}</span>
             </p>
           </div>
         )}
 
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] rounded-lg p-4 ${
+            <div className={`max-w-[80%] rounded-lg p-4 border ${
               msg.role === 'user'
-                ? 'bg-raised border border-hi/20 dark:bg-[#0f1f18] dark:border-green-900/30'
-                : 'bg-panel border border-line'
+                ? 'bg-raised border-cta/20 dark:border-ok/20'
+                : 'bg-panel border-line'
             }`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`text-xs font-sans font-semibold uppercase tracking-wider ${
-                  msg.role === 'user'
-                    ? 'text-hi dark:text-green-400'
-                    : 'text-dim'
+                  msg.role === 'user' ? 'text-ok' : 'text-dim'
                 }`}>
                   {msg.role === 'user' ? '▸ User' : `▸ ${agent.slug}`}
                 </span>
@@ -141,18 +140,14 @@ export default function Playground({ agent }: Props) {
                   {new Date(msg.timestamp).toLocaleTimeString()}
                 </span>
               </div>
-              <pre className={`whitespace-pre-wrap font-mono text-xs leading-relaxed ${
-                msg.role === 'user'
-                  ? 'text-ink dark:text-green-400'
-                  : 'text-ink'
-              }`}>
+              <pre className="whitespace-pre-wrap font-mono text-xs leading-relaxed text-body">
                 {msg.content}
               </pre>
               {msg.role === 'assistant' && (msg.model_used || msg.skills_used?.length) && (
-                <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-2 font-sans">
+                <div className="mt-3 pt-3 border-t border-line flex flex-wrap gap-3 font-sans">
                   {msg.model_used && (
                     <span className="text-[10px] text-dim">
-                      modelo: <span className="text-hi">{msg.model_used}</span>
+                      modelo: <span className="text-body">{msg.model_used}</span>
                     </span>
                   )}
                   {msg.skills_used?.length ? (
@@ -187,12 +182,13 @@ export default function Playground({ agent }: Props) {
             placeholder="Escribe un mensaje… (Enter para enviar, Shift+Enter para nueva línea)"
             rows={2}
             disabled={loading}
-            className="flex-1 bg-raised border-line text-ink placeholder:text-dim font-mono text-sm resize-none focus:border-hi focus:ring-0"
+            className="flex-1 bg-raised border-line text-ink placeholder:text-dim font-mono text-sm resize-none focus:border-cta focus:ring-0"
           />
+          {/* CTA button: #00A3B4 light / #0007cd dark */}
           <Button
             onClick={send}
             disabled={loading || !input.trim()}
-            className="bg-cta text-white hover:bg-cta-hi dark:bg-ok dark:text-[#0a0a0f] dark:hover:opacity-90 font-bold self-end px-5">
+            className="bg-cta text-white hover:bg-cta-hi font-bold self-end px-5">
             {loading ? '…' : '▶'}
           </Button>
         </div>

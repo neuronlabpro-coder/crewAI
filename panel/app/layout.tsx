@@ -29,6 +29,7 @@ const navLinks = [
 
 function Sidebar() {
   return (
+    /* top-nav-dark bg=canvas in dark / surface in light */
     <aside className="w-56 shrink-0 border-r border-line bg-panel flex flex-col min-h-screen">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-line">
@@ -40,7 +41,7 @@ function Sidebar() {
         </p>
       </div>
 
-      {/* Nav */}
+      {/* Nav — nav-link: 14px/500, body color inactive, ink on hover */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
         {navLinks.map(({ href, label }) => (
           <Link
@@ -53,12 +54,14 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* Theme toggle + footer */}
+      {/* Theme toggle */}
       <div className="px-3 pb-2">
         <ThemeToggle />
       </div>
+
+      {/* Footer */}
       <div className="px-5 py-4 border-t border-line">
-        <p className="font-display text-[0.65rem] tracking-[0.14em] uppercase text-dim">
+        <p className="font-display text-[11px] font-semibold tracking-[0.88px] uppercase text-dim">
           42 Agentes
         </p>
         <p className="text-[0.65rem] text-dim mt-0.5">api-agents.shyntai.com</p>
@@ -70,7 +73,7 @@ function Sidebar() {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body className="bg-canvas text-ink min-h-screen flex">
+      <body className="bg-canvas text-body min-h-screen flex">
         <ThemeProvider>
           <Sidebar />
           <main className="flex-1 overflow-auto">{children}</main>

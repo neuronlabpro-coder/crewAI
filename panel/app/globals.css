@@ -35,27 +35,34 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* radius — adapts to theme */
+  /* radius — adapts per theme */
   --radius-sm: var(--r-sm);
   --radius-md: var(--r-md);
   --radius-lg: var(--r-lg);
   --radius-xl: var(--r-xl);
 
-  /* semantic color tokens */
-  --color-canvas: var(--c-canvas);
-  --color-panel: var(--c-panel);
-  --color-raised: var(--c-raised);
-  --color-line: var(--c-line);
-  --color-ink: var(--c-ink);
-  --color-dim: var(--c-dim);
-  --color-cta: var(--c-cta);
-  --color-cta-hi: var(--c-cta-hi);
-  --color-hi: var(--c-hi);
-  --color-ok: var(--c-ok);
-  --color-err: var(--c-err);
+  /* semantic tokens — mapped from exact design-file colors */
+  --color-canvas: var(--c-canvas);   /* page background */
+  --color-panel:  var(--c-panel);    /* card / sidebar */
+  --color-raised: var(--c-raised);   /* elevated surface, hover bg */
+  --color-line:   var(--c-line);     /* borders / hairlines */
+  --color-ink:    var(--c-ink);      /* display / headline text */
+  --color-body:   var(--c-body);     /* running body text */
+  --color-dim:    var(--c-dim);      /* labels, captions, metadata */
+  --color-cta:    var(--c-cta);      /* primary CTA fill */
+  --color-cta-hi: var(--c-cta-hi);   /* CTA hover/active */
+  --color-ok:     var(--c-ok);       /* success / active indicator */
+  --color-err:    var(--c-err);      /* error */
 }
 
-/* ── Airline Altitude — Light ── */
+/* ─────────────────────────────────────────
+   LIGHT  —  Airline Altitude (design-light.md)
+   primary   #15222D   headlines, core text
+   secondary #6B7884   borders, captions, metadata
+   tertiary  #00A3B4   sole interaction accent
+   neutral   #EFF3F6   page background
+   surface   #FFFFFF   cards
+───────────────────────────────────────── */
 :root {
   --background:           #EFF3F6;
   --foreground:           #15222D;
@@ -72,7 +79,7 @@
   --accent:               #EFF3F6;
   --accent-foreground:    #15222D;
   --destructive:          #DC2626;
-  --border:               #D0D9E1;
+  --border:               #6B7884;
   --input:                #FFFFFF;
   --ring:                 #00A3B4;
   --sidebar:              #FFFFFF;
@@ -81,26 +88,39 @@
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent:       #EFF3F6;
   --sidebar-accent-foreground:  #15222D;
-  --sidebar-border:       #D0D9E1;
+  --sidebar-border:       #6B7884;
   --sidebar-ring:         #00A3B4;
   --font-mono:            'JetBrains Mono', 'Fira Code', monospace;
 
-  /* semantic tokens */
+  /* semantic — light exact values */
   --r-sm: 2px; --r-md: 4px; --r-lg: 8px; --r-xl: 8px;
-  --c-canvas: #EFF3F6;
-  --c-panel:  #FFFFFF;
-  --c-raised: #EFF3F6;
-  --c-line:   #D0D9E1;
-  --c-ink:    #15222D;
-  --c-dim:    #6B7884;
-  --c-cta:    #00A3B4;
-  --c-cta-hi: #0092A0;
-  --c-hi:     #00A3B4;
-  --c-ok:     #00A3B4;
+  --c-canvas: #EFF3F6;   /* neutral */
+  --c-panel:  #FFFFFF;   /* surface */
+  --c-raised: #EFF3F6;   /* neutral — hover states, thead */
+  --c-line:   #6B7884;   /* secondary — "borders" per spec */
+  --c-ink:    #15222D;   /* primary */
+  --c-body:   #15222D;   /* primary (same in light) */
+  --c-dim:    #6B7884;   /* secondary — captions, metadata */
+  --c-cta:    #00A3B4;   /* tertiary — SOLE interaction accent */
+  --c-cta-hi: #008F9F;   /* tertiary darker hover */
+  --c-ok:     #00A3B4;   /* using tertiary for active state */
   --c-err:    #DC2626;
 }
 
-/* ── Composio — Dark ── */
+/* ─────────────────────────────────────────
+   DARK  —  Composio (design.md)
+   canvas         #0f0f0f   page floor
+   surface-card   #181818   cards
+   elevated       #222222   elevated surface, secondary buttons
+   primary        #0007cd   sole CTA blue
+   primary-active #0005a3   press state
+   ink / body-strong  #ffffff   display, strong text
+   body           #a8a8a8   default running text
+   muted          #888888   sub-titles, breadcrumbs
+   hairline       #222222   1px dividers
+   success        #33d17a   active / online indicators
+   error          #ff4d4d   validation errors
+───────────────────────────────────────── */
 .dark {
   --background:           #0f0f0f;
   --foreground:           #ffffff;
@@ -119,7 +139,7 @@
   --destructive:          #ff4d4d;
   --border:               #222222;
   --input:                #181818;
-  --ring:                 #99b8ff;
+  --ring:                 #0007cd;
   --sidebar:              #181818;
   --sidebar-foreground:   #ffffff;
   --sidebar-primary:      #0007cd;
@@ -127,21 +147,21 @@
   --sidebar-accent:       #222222;
   --sidebar-accent-foreground:  #ffffff;
   --sidebar-border:       #222222;
-  --sidebar-ring:         #99b8ff;
+  --sidebar-ring:         #0007cd;
 
-  /* semantic tokens */
+  /* semantic — dark exact values */
   --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
-  --c-canvas: #0f0f0f;
-  --c-panel:  #181818;
-  --c-raised: #222222;
-  --c-line:   #222222;
-  --c-ink:    #ffffff;
-  --c-dim:    #888888;
-  --c-cta:    #0007cd;
-  --c-cta-hi: #0005a3;
-  --c-hi:     #99b8ff;
-  --c-ok:     #33d17a;
-  --c-err:    #ff4d4d;
+  --c-canvas: #0f0f0f;   /* canvas */
+  --c-panel:  #181818;   /* surface-card */
+  --c-raised: #222222;   /* surface-card-elevated */
+  --c-line:   #222222;   /* hairline */
+  --c-ink:    #ffffff;   /* ink / body-strong */
+  --c-body:   #a8a8a8;   /* body — default running text */
+  --c-dim:    #888888;   /* muted — sub-titles, breadcrumbs */
+  --c-cta:    #0007cd;   /* primary */
+  --c-cta-hi: #0005a3;   /* primary-active */
+  --c-ok:     #33d17a;   /* semantic-success */
+  --c-err:    #ff4d4d;   /* semantic-error */
 }
 
 * {
@@ -158,11 +178,17 @@ html.dark {
 
 body {
   background-color: var(--c-canvas);
-  color: var(--c-ink);
+  color: var(--c-body);
   font-family: var(--font-body), Inter, sans-serif;
   font-size: 0.95rem;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+}
+
+/* abcDiatype substitute: Inter 500 -1.5% tracking for dark mode display */
+.dark body {
+  letter-spacing: -0.015em;
+  font-weight: 400;
 }
 
 .font-display {
@@ -170,17 +196,7 @@ body {
 }
 
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--c-panel);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--c-line);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--c-dim);
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--c-panel); }
+::-webkit-scrollbar-thumb  { background: var(--c-line);  border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-dim); }

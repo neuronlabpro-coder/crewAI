@@ -87,8 +87,11 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
     }
   }
 
-  const field   = 'w-full h-9 px-3 rounded-md border border-line bg-panel text-ink text-sm placeholder:text-dim outline-none focus:border-hi transition-colors'
+  /* input: light → white bg, #6B7884 border | dark → #181818 bg, #222222 border */
+  const field   = 'w-full h-9 px-3 rounded-md border border-line bg-panel text-ink text-sm placeholder:text-dim outline-none focus:border-cta transition-colors'
+  /* section card */
   const section = 'space-y-4 p-6 rounded-lg border border-line bg-panel'
+  /* label: caption-uppercase style */
   const lbl     = 'block font-display text-[0.72rem] font-medium tracking-[0.14em] uppercase text-dim mb-1.5'
 
   return (
@@ -121,7 +124,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
           </div>
           <div className="flex items-center gap-3 pt-5">
             <Switch checked={form.active} onCheckedChange={(v) => set('active', v)} />
-            <span className="text-sm text-ink">{form.active ? 'Activo' : 'Inactivo'}</span>
+            <span className="text-sm text-body">{form.active ? 'Activo' : 'Inactivo'}</span>
           </div>
         </div>
       </div>
@@ -170,7 +173,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className={lbl}>
-              Max Tokens — <span className="text-hi normal-case tracking-normal">{form.max_tokens}</span>
+              Max Tokens — <span className="text-ok normal-case tracking-normal">{form.max_tokens}</span>
             </label>
             <input type="range" min={512} max={4096} step={128} value={form.max_tokens}
               onChange={(e) => set('max_tokens', Number(e.target.value))}
@@ -181,7 +184,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
           </div>
           <div>
             <label className={lbl}>
-              Temperatura — <span className="text-hi normal-case tracking-normal">{form.temperature.toFixed(2)}</span>
+              Temperatura — <span className="text-ok normal-case tracking-normal">{form.temperature.toFixed(2)}</span>
             </label>
             <input type="range" min={0} max={1} step={0.05} value={form.temperature}
               onChange={(e) => set('temperature', Number(e.target.value))}
@@ -207,9 +210,9 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
           <label className={lbl}>
             Dominios MCP <span className="text-dim normal-case tracking-normal font-sans font-normal">— Enter o coma para añadir</span>
           </label>
-          <div className="flex flex-wrap gap-2 p-3 rounded-md border border-line bg-panel min-h-[42px] focus-within:border-hi transition-colors">
+          <div className="flex flex-wrap gap-2 p-3 rounded-md border border-line bg-panel min-h-[42px] focus-within:border-cta transition-colors">
             {form.mcp_domains.map((d) => (
-              <span key={d} className="flex items-center gap-1 bg-raised border border-line text-ink text-xs px-2 py-0.5 rounded-sm font-mono">
+              <span key={d} className="flex items-center gap-1 bg-raised border border-line text-body text-xs px-2 py-0.5 rounded-sm font-mono">
                 {d}
                 <button type="button" onClick={() => removeDomain(d)}
                   className="text-dim hover:text-err ml-1 transition-colors">
@@ -221,7 +224,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
               onChange={(e) => setDomainInput(e.target.value)}
               onKeyDown={addDomain}
               placeholder={form.mcp_domains.length === 0 ? 'vulnerability, cve, cvss…' : ''}
-              className="bg-transparent text-ink text-xs outline-none flex-1 min-w-[120px] placeholder:text-dim" />
+              className="bg-transparent text-body text-xs outline-none flex-1 min-w-[120px] placeholder:text-dim" />
           </div>
         </div>
       </div>
@@ -237,7 +240,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
                 className={`${field} font-mono text-xs text-dim`} />
               <button type="button"
                 onClick={() => navigator.clipboard.writeText(initialData.webhook_url!)}
-                className="px-3 h-9 text-xs rounded-md border border-line text-dim hover:text-ink hover:border-dim transition-colors whitespace-nowrap">
+                className="px-3 h-9 text-xs rounded-md border border-line text-dim hover:text-ink transition-colors whitespace-nowrap">
                 Copiar
               </button>
             </div>
@@ -252,7 +255,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
       )}
 
       {error && (
-        <div className="p-3 rounded-md border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-[#ff4d4d] text-sm">
+        <div className="p-3 rounded-md border border-err/40 bg-err/10 text-err text-sm">
           {error}
         </div>
       )}
@@ -263,7 +266,7 @@ export default function AgentForm({ initialData, onSubmit, submitLabel = 'Guarda
           {saving ? 'Guardando…' : submitLabel}
         </button>
         <button type="button" onClick={() => router.back()}
-          className="px-5 py-2.5 border border-line text-dim text-sm rounded-md hover:text-ink hover:border-dim transition-colors">
+          className="px-5 py-2.5 border border-line text-dim text-sm rounded-md hover:text-ink transition-colors">
           Cancelar
         </button>
       </div>

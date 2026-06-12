@@ -16,13 +16,14 @@ export default async function PlaygroundPage({ params }: Props) {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Breadcrumb */}
+      {/* Breadcrumb — muted text per design */}
       <div className="px-6 py-3 border-b border-line bg-panel flex items-center gap-2 text-xs text-dim shrink-0">
         <Link href="/agents" className="hover:text-ink transition-colors">Agentes</Link>
-        <span className="text-line">›</span>
+        <span className="text-dim">›</span>
         <Link href={`/agents/${slug}`} className="hover:text-ink transition-colors">{agent.name}</Link>
-        <span className="text-line">›</span>
-        <span className="text-hi font-display font-medium">Playground</span>
+        <span className="text-dim">›</span>
+        {/* tertiary in light, ink in dark — active/current page */}
+        <span className="text-cta dark:text-ink font-display font-medium">Playground</span>
       </div>
 
       <div className="flex-1 overflow-hidden">

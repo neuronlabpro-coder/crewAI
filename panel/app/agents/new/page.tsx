@@ -25,7 +25,7 @@ export default function NewAgentPage() {
   return (
     <div className="p-8 max-w-3xl">
       <div className="mb-6">
-        <h1 className="font-display text-[2rem] font-medium text-ink leading-none">
+        <h1 className="font-display text-[2rem] font-medium text-ink leading-none tracking-[-0.03em]">
           Nuevo Agente
         </h1>
         <p className="text-sm text-dim mt-1">
